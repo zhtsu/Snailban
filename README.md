@@ -1,2 +1,2 @@
 # SnailMaster
-A Sokoban like game made by Godot Engine(C#)
+A Sokoban like game made with Godot Engine(C#)
