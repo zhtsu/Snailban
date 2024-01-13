@@ -15,9 +15,22 @@ run/main_scene="res://scenes/main.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[display]
+
+window/size/viewport_width=540
+window/size/viewport_height=960
+
 [dotnet]
 
 project/assembly_name="SnailMaster"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/nklbdev.importality/plugin.cfg")
+
+[filesystem]
+
+import/blender/enabled=false
 
 [rendering]
 
