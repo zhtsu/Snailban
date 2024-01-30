@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="SnailMaster"
+config/name="SnailCity"
 run/main_scene="res://scenes/main.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 config/icon="res://icon.svg"
@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 window/size/viewport_width=540
 window/size/viewport_height=960
+window/size/resizable=false
 
 [dotnet]
 
