@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://cmb5mwyoxemrl"]
+
+[ext_resource type="Script" path="res://scenes/Main.cs" id="1_js1jq"]
+[ext_resource type="PackedScene" uid="uid://dnk4rb32ji8c8" path="res://scenes/core/Console.tscn" id="2_b3wn4"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_js1jq")
+
+[node name="Console" parent="." instance=ExtResource("2_b3wn4")]

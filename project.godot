@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="SnailCity"
-run/main_scene="res://scenes/main.tscn"
+run/main_scene="res://scenes/Main.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -32,7 +32,13 @@ enabled=PackedStringArray("res://addons/nklbdev.importality/plugin.cfg")
 [filesystem]
 
 import/blender/enabled=false
+import/fbx/enabled=false
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 textures/vram_compression/import_etc2_astc=true
