@@ -15,10 +15,15 @@ run/main_scene="res://Scenes/Main.tscn"
 config/features=PackedStringArray("4.2", "C#", "Mobile")
 config/icon="res://icon.svg"
 
+[autoload]
+
+ControlSignals="*res://Scenes/Core/ControlSignals.cs"
+
 [display]
 
-window/size/viewport_width=576
-window/size/viewport_height=1024
+window/size/viewport_width=288
+window/size/viewport_height=512
+window/size/resizable=false
 window/size/window_width_override=288
 window/size/window_height_override=512
 
