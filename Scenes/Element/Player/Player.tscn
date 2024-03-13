@@ -1,12 +1,62 @@
-[gd_scene load_steps=3 format=3 uid="uid://duix7uxumv0ke"]
+[gd_scene load_steps=7 format=3 uid="uid://duix7uxumv0ke"]
 
 [ext_resource type="Script" path="res://Scenes/Element/Player/Player.cs" id="1_y71hb"]
-[ext_resource type="Texture2D" uid="uid://yjnqjggvirrn" path="res://icon.svg" id="2_skmi6"]
+[ext_resource type="AnimationNodeStateMachine" uid="uid://bmn8n5ojglmtr" path="res://Resources/ansm_player.tres" id="2_0gd76"]
+[ext_resource type="Texture2D" uid="uid://dwq70ylx0ne20" path="res://Assets/DarkNinja.png" id="2_27xxw"]
+
+[sub_resource type="Animation" id="Animation_sw1ud"]
+resource_name = "Walk"
+length = 0.8
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 4, 8, 12]
+}
+
+[sub_resource type="Animation" id="Animation_mbbcr"]
+resource_name = "Idle"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_do3k6"]
+_data = {
+"Idle": SubResource("Animation_mbbcr"),
+"Walk": SubResource("Animation_sw1ud")
+}
 
 [node name="Player" type="Node2D"]
 script = ExtResource("1_y71hb")
+Id = 0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(143, 169)
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("2_skmi6")
+position = Vector2(155, 156)
+texture = ExtResource("2_27xxw")
+hframes = 4
+vframes = 7
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_do3k6")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = ExtResource("2_0gd76")
