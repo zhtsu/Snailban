@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://dhmw8v0mqjltj"]
+
+[ext_resource type="PackedScene" uid="uid://cjgfcdy2qotd" path="res://Scenes/Element/Tile/Tile.tscn" id="1_gotnk"]
+[ext_resource type="Script" path="res://Scenes/Element/Tile/Barrier.cs" id="2_oyi6p"]
+
+[node name="Barrier" instance=ExtResource("1_gotnk")]
+script = ExtResource("2_oyi6p")

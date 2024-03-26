@@ -13,5 +13,3 @@ script = ExtResource("1_lv35f")
 [node name="Player" parent="." instance=ExtResource("3_iiy3m")]
 
 [node name="Map" parent="." instance=ExtResource("4_77xam")]
-Row = 2
-Column = 2

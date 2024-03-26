@@ -1,30 +1,22 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 
 public partial class Map : Node2D
 {
 	[Export]
-	private int Row = 16;
+	public int Id;
 
-	[Export]
-	private int Column = 16;
-
-	[Export]
-	private int TileWidth = 16;
-
-	[Export]
-	private int TileHeight = 16;
-
-	[Export]
-	private Vector2 StartPosition = new Vector2(0, 0);
-
-	private int [,] TileMatrix;
+	private FMapData Data;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		InitTileMatrix();
+		if (GData.MapDataDict.TryGetValue(Id, out Data) == false)
+		{
+			GD.PushWarning("Invalid ID of map! ID: " + Id.ToString());
+		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -32,18 +24,9 @@ public partial class Map : Node2D
 	{
 	}
 
-	private void InitTileMatrix()
+	private void InitLayers()
 	{
-		TileMatrix = new int[Row,Column];
-
-		for (int i = 0; i < Row; i++)
-		{
-			for (int j = 0; j < Column; j++)
-			{
-				TileMatrix[i,j] = -1;
-				GD.Print(TileMatrix[i,j]);
-			}
-		}
+		
 	}
 
 	private void Refresh()

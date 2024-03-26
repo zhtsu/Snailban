@@ -17,7 +17,11 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-ControlSignals="*res://Scenes/Core/ControlSignals.cs"
+ControlSignals="*res://Scenes/Global/ControlSignals.cs"
+Enums="*res://Scenes/Global/Enums.cs"
+Paths="*res://Scenes/Global/Paths.cs"
+Structs="*res://Scenes/Global/Structs.cs"
+GData="*res://Scenes/Global/GData.cs"
 
 [display]
 
