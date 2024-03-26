@@ -5,6 +5,7 @@
     "column": 5,
     "tile_width": 16,
     "tile_height": 16,
+    "layer_count": 2,
     "layers": [
         [
             [-1, -1, -1, -1, -1],

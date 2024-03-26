@@ -15,17 +15,17 @@ public partial class GData : Node
 
     public void LoadMapData()
     {
-        List<string> MapFiles = Methods.LoadTxtToList(Paths.GenMapDataPath() + "all.maps");
+        List<string> MapFiles = Methods.LoadTxtToList(Paths.GenMapDataPath("all.maps"));
         foreach(string MapFile in MapFiles)
         {
-            FMapData MapData = LoadMapDataFromPath(Paths.GenMapDataPath() + MapFile);
+            FMapData MapData = LoadMapDataFromPath(Paths.GenMapDataPath(MapFile));
             MapDataDict.Add(MapData.Id, MapData);
         }
     }
 
     public void LoadElementData()
     {
-        Dictionary<string, List<string>> Dict = Methods.LoadCsv(Paths.GenDataPath() + "element_table.csv");
+        Dictionary<string, List<string>> Dict = Methods.LoadCsv(Paths.GenDataPath("element_table.csv"));
         
         List<string> Ids = Dict["ID"];
         List<string> Tscns = Dict["TSCN"];
@@ -52,6 +52,7 @@ public partial class GData : Node
         RetVal.Column = (int)MapDataDict["column"];
         RetVal.TileWidth = (int)MapDataDict["tile_width"];
         RetVal.TileHeight = (int)MapDataDict["tile_height"];
+        RetVal.LayerCount = (int)MapDataDict["layer_count"];
         Godot.Collections.Array LayersArray = (Godot.Collections.Array)MapDataDict["layers"];
         RetVal.Layers = new int[LayersArray.Count, RetVal.Row, RetVal.Column];
 

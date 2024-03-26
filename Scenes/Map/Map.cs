@@ -24,13 +24,23 @@ public partial class Map : Node2D
 	{
 	}
 
-	private void InitLayers()
+	private void InitMap()
 	{
-		
-	}
+		//PackedScene TscnScene = GD.Load(Paths.GenElementPath(""));
 
-	private void Refresh()
-	{
-
+		for (int i = Data.LayerCount - 1; i >= 0; i--)
+		{
+			for (int j = 0; j < Data.Row; j++)
+			{
+				for (int k = 0; k < Data.Column; k++)
+				{
+					int ElementId = Data.Layers[i, j, k];
+					if (GData.ElementDict.TryGetValue(ElementId, out string TscnPath))
+					{
+						//AddChild();
+					}
+				}
+			}
+		}
 	}
 }

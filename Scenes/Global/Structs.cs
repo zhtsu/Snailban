@@ -8,6 +8,7 @@ public struct FMapData
     public int Column;
     public int TileWidth;
     public int TileHeight;
+    public int LayerCount;
     public int [,,] Layers;
 }
 
