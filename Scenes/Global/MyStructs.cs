@@ -1,6 +1,6 @@
 using Godot;
 
-public struct FMapData
+public struct FMapBean
 {
     public int Id;
     public string Name;

@@ -6,7 +6,7 @@ public partial class PreloadedData : Node
 {
     // All .tscn file path of Elements
     public static Dictionary<int, string> ElementDict = new Dictionary<int, string>();
-    public static Dictionary<int, FMapData> MapDataDict = new Dictionary<int, FMapData>();
+    public static Dictionary<int, FMapBean> MapDataDict = new Dictionary<int, FMapBean>();
 
     public override void _Ready()
 	{
@@ -19,14 +19,14 @@ public partial class PreloadedData : Node
         List<string> MapFiles = MyMethods.LoadTxtToList(MyPaths.GenMapDataPath("all.maps"));
         foreach(string MapFile in MapFiles)
         {
-            FMapData MapData = LoadMapDataFromPath(MyPaths.GenMapDataPath(MapFile));
+            FMapBean MapData = LoadMapBeanFromFile(MyPaths.GenMapDataPath(MapFile));
             MapDataDict.Add(MapData.Id, MapData);
         }
     }
 
     public void LoadElementData()
     {
-        Dictionary<string, List<string>> Dict = MyMethods.LoadCsv(MyPaths.GenDataPath("element_table.csv"));
+        Dictionary<string, List<string>> Dict = MyMethods.LoadCsv(MyPaths.GenDataPath("elements.csv"));
         
         List<string> Ids = Dict["ID"];
         List<string> Tscns = Dict["TSCN"];
@@ -42,11 +42,11 @@ public partial class PreloadedData : Node
         }
     }
 
-    public FMapData LoadMapDataFromPath(string FilePath)
+    public FMapBean LoadMapBeanFromFile(string FilePath)
     {
         Godot.Collections.Dictionary MapDataDict = MyMethods.LoadJson(FilePath);
         
-        FMapData RetVal = new FMapData();
+        FMapBean RetVal = new FMapBean();
         RetVal.Id = (int)MapDataDict["id"];
         RetVal.Name = (string)MapDataDict["name"];
         RetVal.Row = (int)MapDataDict["row"];
