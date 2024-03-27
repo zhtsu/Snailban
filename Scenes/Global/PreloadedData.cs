@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using Godot;
 
-public partial class GData : Node
+public partial class PreloadedData : Node
 {
+    // All .tscn file path of Elements
     public static Dictionary<int, string> ElementDict = new Dictionary<int, string>();
     public static Dictionary<int, FMapData> MapDataDict = new Dictionary<int, FMapData>();
 
@@ -15,17 +16,17 @@ public partial class GData : Node
 
     public void LoadMapData()
     {
-        List<string> MapFiles = Methods.LoadTxtToList(Paths.GenMapDataPath("all.maps"));
+        List<string> MapFiles = MyMethods.LoadTxtToList(MyPaths.GenMapDataPath("all.maps"));
         foreach(string MapFile in MapFiles)
         {
-            FMapData MapData = LoadMapDataFromPath(Paths.GenMapDataPath(MapFile));
+            FMapData MapData = LoadMapDataFromPath(MyPaths.GenMapDataPath(MapFile));
             MapDataDict.Add(MapData.Id, MapData);
         }
     }
 
     public void LoadElementData()
     {
-        Dictionary<string, List<string>> Dict = Methods.LoadCsv(Paths.GenDataPath("element_table.csv"));
+        Dictionary<string, List<string>> Dict = MyMethods.LoadCsv(MyPaths.GenDataPath("element_table.csv"));
         
         List<string> Ids = Dict["ID"];
         List<string> Tscns = Dict["TSCN"];
@@ -43,7 +44,7 @@ public partial class GData : Node
 
     public FMapData LoadMapDataFromPath(string FilePath)
     {
-        Godot.Collections.Dictionary MapDataDict = Methods.LoadJson(FilePath);
+        Godot.Collections.Dictionary MapDataDict = MyMethods.LoadJson(FilePath);
         
         FMapData RetVal = new FMapData();
         RetVal.Id = (int)MapDataDict["id"];

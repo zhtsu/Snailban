@@ -17,23 +17,25 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-ControlSignals="*res://Scenes/Global/ControlSignals.cs"
-Enums="*res://Scenes/Global/Enums.cs"
-Paths="*res://Scenes/Global/Paths.cs"
-Structs="*res://Scenes/Global/Structs.cs"
-GData="*res://Scenes/Global/GData.cs"
+PreloadedData="*res://Scenes/Global/PreloadedData.cs"
+MySignals="*res://Scenes/Global/MySignals.cs"
 
 [display]
 
-window/size/viewport_width=288
+window/size/viewport_width=512
 window/size/viewport_height=512
 window/size/resizable=false
-window/size/window_width_override=288
+window/size/window_width_override=512
 window/size/window_height_override=512
+window/stretch/mode="canvas_items"
 
 [dotnet]
 
 project/assembly_name="SnailCity"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/phantom_camera/plugin.cfg")
 
 [rendering]
 

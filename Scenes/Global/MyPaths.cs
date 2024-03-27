@@ -1,7 +1,8 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
-public partial class Paths : Node
+public partial class MyPaths : Node
 {
     public static string GenMapDataPath(string File)
     {
@@ -15,6 +16,6 @@ public partial class Paths : Node
 
     public static string GenElementPath(string File)
     {
-        return ProjectSettings.GlobalizePath("res://Assets/Scene/Element/") + File;
+        return ProjectSettings.GlobalizePath("res://Scenes/Element/") + File;
     }
 }

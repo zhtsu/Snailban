@@ -1,12 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://dlqm8m516w68k"]
+[gd_scene load_steps=3 format=3 uid="uid://c38nbkd0nddyv"]
 
-[ext_resource type="PackedScene" uid="uid://cjgfcdy2qotd" path="res://Scenes/Element/Tile/Tile.tscn" id="1_hs8tt"]
-[ext_resource type="Script" path="res://Scenes/Element/Tile/Ground/Cave.cs" id="2_37l8o"]
+[ext_resource type="PackedScene" uid="uid://bntklxb5spt38" path="res://Scenes/Element/Element.tscn" id="1_7d2v0"]
 [ext_resource type="Texture2D" uid="uid://yjnqjggvirrn" path="res://icon.svg" id="3_sx8lr"]
 
-[node name="Cave" instance=ExtResource("1_hs8tt")]
-script = ExtResource("2_37l8o")
+[node name="Cave" instance=ExtResource("1_7d2v0")]
 
-[node name="Sprite2D" type="Sprite2D" parent="." index="0"]
-scale = Vector2(0.2, 0.2)
+[node name="Sprite2D" parent="." index="0"]
+scale = Vector2(0.1, 0.1)
 texture = ExtResource("3_sx8lr")

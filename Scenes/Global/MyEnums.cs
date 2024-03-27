@@ -3,7 +3,7 @@ using System;
 
 
 
-public partial class Enums : Node
+public partial class MyEnums : Node
 {
 	
 }

@@ -12,7 +12,7 @@ public struct FMapData
     public int [,,] Layers;
 }
 
-public partial class Structs : Node
+public partial class MyStructs : Node
 {
     
 }

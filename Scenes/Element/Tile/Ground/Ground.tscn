@@ -1,7 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://jlccgb2poai6"]
-
-[ext_resource type="PackedScene" uid="uid://cjgfcdy2qotd" path="res://Scenes/Element/Tile/Tile.tscn" id="1_kjfe3"]
-[ext_resource type="Script" path="res://Scenes/Element/Tile/Ground.cs" id="2_pagvy"]
-
-[node name="Ground" instance=ExtResource("1_kjfe3")]
-script = ExtResource("2_pagvy")

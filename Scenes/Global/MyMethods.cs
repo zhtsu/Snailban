@@ -3,7 +3,7 @@ using Microsoft.VisualBasic.FileIO;
 using System.Collections.Generic;
 using System.IO;
 
-public partial class Methods : Node
+public partial class MyMethods : Node
 {
     public static Godot.Collections.Dictionary LoadJson(string FilePath)
     {
