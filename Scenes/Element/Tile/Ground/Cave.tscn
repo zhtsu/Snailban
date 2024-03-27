@@ -1,10 +1,9 @@
 [gd_scene load_steps=3 format=3 uid="uid://c38nbkd0nddyv"]
 
 [ext_resource type="PackedScene" uid="uid://bntklxb5spt38" path="res://Scenes/Element/Element.tscn" id="1_7d2v0"]
-[ext_resource type="Texture2D" uid="uid://yjnqjggvirrn" path="res://icon.svg" id="3_sx8lr"]
+[ext_resource type="Texture2D" uid="uid://b3b7otl8w1eid" path="res://Assets/grass.png" id="2_sn0ok"]
 
 [node name="Cave" instance=ExtResource("1_7d2v0")]
 
 [node name="Sprite2D" parent="." index="0"]
-scale = Vector2(0.1, 0.1)
-texture = ExtResource("3_sx8lr")
+texture = ExtResource("2_sn0ok")

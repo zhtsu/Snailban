@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dwq70ylx0ne20"
-path="res://.godot/imported/DarkNinja.png-d120a490b8409b14fa4b2fcbb8f25c28.ctex"
+uid="uid://b3b7otl8w1eid"
+path="res://.godot/imported/grass.png-46bb554aade75a091da98570239d1507.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/DarkNinja.png"
-dest_files=["res://.godot/imported/DarkNinja.png-d120a490b8409b14fa4b2fcbb8f25c28.ctex"]
+source_file="res://Assets/grass.png"
+dest_files=["res://.godot/imported/grass.png-46bb554aade75a091da98570239d1507.ctex"]
 
 [params]
 

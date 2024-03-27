@@ -6,3 +6,5 @@
 script = ExtResource("1_jwbpt")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+centered = false

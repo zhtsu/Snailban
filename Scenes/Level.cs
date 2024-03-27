@@ -30,7 +30,7 @@ public partial class Level : Node2D
 
 	private void InitMap()
 	{
-		for (int i = MapBean.LayerCount - 1; i >= 0; i--)
+		for (int i = 0; i < MapBean.LayerCount; i++)
 		{
 			for (int j = 0; j < MapBean.Row; j++)
 			{
@@ -40,8 +40,7 @@ public partial class Level : Node2D
 					if (PreloadedElementDict.TryGetValue(ElementId, out PackedScene ElementScene))
 					{
 						Element MyElement = (Element)ElementScene.Instantiate();
-						Random Rd = new Random();
-						MyElement.Position = new Vector2(MapBean.Row * j * 12, MapBean.Column * k * 12);
+						MyElement.Position = new Vector2(MapBean.TileWidth * j, MapBean.TileHeight * k);
 						AddChild(MyElement);
 					}
 				}

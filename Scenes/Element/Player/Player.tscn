@@ -2,12 +2,11 @@
 
 [ext_resource type="PackedScene" uid="uid://bntklxb5spt38" path="res://Scenes/Element/Element.tscn" id="1_84i00"]
 [ext_resource type="Script" path="res://Scenes/Element/Player/Player.cs" id="1_y71hb"]
-[ext_resource type="Texture2D" uid="uid://dwq70ylx0ne20" path="res://Assets/DarkNinja.png" id="2_27xxw"]
+[ext_resource type="Texture2D" uid="uid://yjnqjggvirrn" path="res://icon.svg" id="3_i1uca"]
 
 [node name="Player" instance=ExtResource("1_84i00")]
 script = ExtResource("1_y71hb")
 
 [node name="Sprite2D" parent="." index="0"]
-texture = ExtResource("2_27xxw")
-hframes = 4
-vframes = 6
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_i1uca")
