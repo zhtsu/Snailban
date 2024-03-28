@@ -1,9 +1,19 @@
 [gd_scene load_steps=3 format=3 uid="uid://dt7n50ftnvbxg"]
 
 [ext_resource type="Script" path="res://Scenes/Main.cs" id="1_lv35f"]
-[ext_resource type="PackedScene" uid="uid://dbstovr24iees" path="res://Scenes/Level.tscn" id="2_ah1yp"]
+[ext_resource type="PackedScene" uid="uid://c8vgyic4iejk7" path="res://Scenes/Game/Level.tscn" id="2_ah1yp"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_lv35f")
+
+[node name="Background" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="Background"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Level" parent="." instance=ExtResource("2_ah1yp")]

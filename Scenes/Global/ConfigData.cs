@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using Godot;
 
-public partial class PreloadedData : Node
+public partial class ConfigData : Node
 {
     // All .tscn file path of Elements
-    public static Dictionary<int, string> ElementDict = new Dictionary<int, string>();
-    public static Dictionary<int, FMapBean> MapDataDict = new Dictionary<int, FMapBean>();
+    public static Dictionary<int, ElementBean> ElementBeanDict = new Dictionary<int, ElementBean>();
+    public static Dictionary<int, FMapBean> MapBeanDict = new Dictionary<int, FMapBean>();
 
     public override void _Ready()
 	{
@@ -20,7 +20,7 @@ public partial class PreloadedData : Node
         foreach(string MapFile in MapFiles)
         {
             FMapBean MapData = LoadMapBeanFromFile(MyPaths.GenMapDataPath(MapFile));
-            MapDataDict.Add(MapData.Id, MapData);
+            MapBeanDict.Add(MapData.Id, MapData);
         }
     }
 
@@ -29,8 +29,9 @@ public partial class PreloadedData : Node
         Dictionary<string, List<string>> Dict = MyMethods.LoadCsv(MyPaths.GenDataPath("elements.csv"));
         
         List<string> Ids = Dict["ID"];
-        List<string> Tscns = Dict["TSCN"];
-        if (Ids.Count != Tscns.Count)
+        List<string> Names = Dict["NAME"];
+        List<string> Paths = Dict["PATH"];
+        if ((Ids.Count == Names.Count && Names.Count == Paths.Count) == false)
         {
             GD.PrintErr("CSV file format error!");
             return;
@@ -38,7 +39,9 @@ public partial class PreloadedData : Node
 
         for (int i = 0; i < Ids.Count; i++)
         {
-            ElementDict.Add(Int32.Parse(Ids[i]), Tscns[i]);
+            int Id = Int32.Parse(Ids[i]);
+            ElementBean MyElementBean = new ElementBean(Id, Names[i], Paths[i]);
+            ElementBeanDict.Add(Id, MyElementBean);
         }
     }
 

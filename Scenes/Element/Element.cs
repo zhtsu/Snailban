@@ -3,6 +3,6 @@ using System;
 
 public partial class Element : Node2D
 {
-	private int ID = -1;
-	private string DisplayName = "Element";
+	public int Id = -1;
+	public string DisplayName = "Element";
 }

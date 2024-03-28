@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class MySignals : Node
+public partial class CustomSignals : Node
 {
 	[Signal]
     public delegate void UpKeyEventHandler();

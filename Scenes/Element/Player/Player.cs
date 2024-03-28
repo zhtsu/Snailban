@@ -1,20 +1,26 @@
 using Godot;
 using System;
+using System.Numerics;
 
 public partial class Player : Element
 {
-	private MySignals _MySignals;
-	// Location range: [1, 64]
-	private int Location;
+	private AnimationPlayer AnimPlayer;
+	private Timer BlinkTimer;
+	private bool FirstBlink = true;
+	public System.Numerics.Vector2 Location = new System.Numerics.Vector2(0, 0);
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_MySignals = GetNode<MySignals>("/root/MySignals");
-		_MySignals.UpKey += MoveUp;
-		_MySignals.DownKey += MoveDown;
-		_MySignals.LeftKey += MoveLeft;
-		_MySignals.RightKey += MoveRight;
+		base._Ready();
+
+		AnimPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+		BlinkTimer = GetNode<Timer>("Timer");
+
+		
+
+		BlinkTimer.Connect("timeout", new Callable(this, nameof(StartBlinkTimer)));
+		StartBlinkTimer();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -40,5 +46,19 @@ public partial class Player : Element
 	private void MoveRight()
 	{
 		
+	}
+
+	private void StartBlinkTimer()
+	{
+		Random Rd = new Random();
+		BlinkTimer.Start(Rd.NextDouble() * 52 + 8);
+
+		if (FirstBlink)
+		{
+			FirstBlink = false;
+			return;
+		}
+
+		AnimPlayer.Play("Blink");
 	}
 }

@@ -1,12 +1,40 @@
-[gd_scene load_steps=4 format=3 uid="uid://dqqdca8tcfful"]
+[gd_scene load_steps=7 format=3 uid="uid://dqqdca8tcfful"]
 
 [ext_resource type="PackedScene" uid="uid://bntklxb5spt38" path="res://Scenes/Element/Element.tscn" id="1_84i00"]
 [ext_resource type="Script" path="res://Scenes/Element/Player/Player.cs" id="1_y71hb"]
-[ext_resource type="Texture2D" uid="uid://yjnqjggvirrn" path="res://icon.svg" id="3_i1uca"]
+[ext_resource type="Texture2D" uid="uid://c4niio40o5d3w" path="res://Assets/Textures/player.png" id="3_lbb4w"]
+[ext_resource type="Texture2D" uid="uid://0pyae1fpdfd" path="res://Assets/Textures/player_blink.png" id="4_jkao1"]
+
+[sub_resource type="Animation" id="Animation_wirkk"]
+resource_name = "Blink"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Body:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("3_lbb4w"), ExtResource("4_jkao1"), ExtResource("3_lbb4w")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_iwfxc"]
+_data = {
+"Blink": SubResource("Animation_wirkk")
+}
 
 [node name="Player" instance=ExtResource("1_84i00")]
 script = ExtResource("1_y71hb")
 
-[node name="Sprite2D" parent="." index="0"]
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("3_i1uca")
+[node name="Body" parent="." index="0"]
+texture = ExtResource("3_lbb4w")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="1"]
+libraries = {
+"": SubResource("AnimationLibrary_iwfxc")
+}
+
+[node name="Timer" type="Timer" parent="." index="2"]
