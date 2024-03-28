@@ -1,0 +1,81 @@
+[gd_scene load_steps=8 format=3 uid="uid://c5cqlx8g24oi3"]
+
+[ext_resource type="Script" path="res://Scenes/UI/MainMenu.cs" id="1_ui45d"]
+[ext_resource type="Texture2D" uid="uid://cablhqqpabta1" path="res://Assets/Textures/keyboard.png" id="1_w5dq8"]
+[ext_resource type="Texture2D" uid="uid://ctd1doupbxga0" path="res://Assets/Textures/title.png" id="2_m2ov4"]
+[ext_resource type="Texture2D" uid="uid://djseaxgg2eyu0" path="res://Assets/Textures/snail.png" id="3_imj8n"]
+[ext_resource type="Texture2D" uid="uid://snw41qn5l5uv" path="res://Assets/Textures/play_button.png" id="4_86efi"]
+[ext_resource type="Texture2D" uid="uid://bua31kgs6ugyi" path="res://Assets/Textures/language_button.png" id="5_j3ntq"]
+[ext_resource type="Texture2D" uid="uid://c4niio40o5d3w" path="res://Assets/Textures/player.png" id="6_i5e36"]
+
+[node name="MainMenu" type="CanvasLayer"]
+script = ExtResource("1_ui45d")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -192.0
+offset_top = -192.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("1_w5dq8")
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+offset_right = 512.0
+offset_bottom = 128.0
+texture = ExtResource("2_m2ov4")
+
+[node name="Cursor" type="TextureRect" parent="."]
+offset_left = 32.0
+offset_top = 336.0
+offset_right = 96.0
+offset_bottom = 400.0
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_imj8n")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 72.0
+offset_top = -192.0
+offset_right = 200.0
+offset_bottom = -60.0
+grow_vertical = 0
+metadata/_edit_group_ = true
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("4_86efi")
+
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("5_j3ntq")
+
+[node name="TextureRect3" type="TextureRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_i5e36")
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -23.0
+offset_right = 40.0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+text = "EN"
