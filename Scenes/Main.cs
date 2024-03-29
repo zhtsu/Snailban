@@ -24,23 +24,23 @@ public partial class Main : Node
 
 		if (@event is InputEventKey EventKey)
 		{
-			if (Input.IsActionJustReleased("Up"))
+			if (Input.IsActionJustPressed("Up"))
 			{
 				MySignals.EmitSignal("UpKey");
 			}
-			else if (Input.IsActionJustReleased("Down"))
+			else if (Input.IsActionJustPressed("Down"))
 			{
 				MySignals.EmitSignal("DownKey");
 			}
-			else if (Input.IsActionJustReleased("Left"))
+			else if (Input.IsActionJustPressed("Left"))
 			{
 				MySignals.EmitSignal("LeftKey");
 			}
-			else if (Input.IsActionJustReleased("Right"))
+			else if (Input.IsActionJustPressed("Right"))
 			{
 				MySignals.EmitSignal("RightKey");
 			}
-			else if (Input.IsActionJustReleased("Space"))
+			else if (Input.IsActionJustPressed("Space"))
 			{
 				MySignals.EmitSignal("SpaceKey");
 			}
@@ -49,6 +49,12 @@ public partial class Main : Node
 
 	private void LoadLevel(int MapId)
 	{
-		GD.Print(MapId);
+		MainMenu MyMainMenu = GetNode<MainMenu>("MainMenu");
+		RemoveChild(MyMainMenu);
+		MyMainMenu.QueueFree();
+		PackedScene LevelScene = (PackedScene)GD.Load("res://Scenes/Game/Level.tscn");
+		Level MyLevel = (Level)LevelScene.Instantiate();
+		MyLevel.MapId = MapId;
+		AddChild(MyLevel);
 	}
 }

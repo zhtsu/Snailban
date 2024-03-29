@@ -6,7 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://djseaxgg2eyu0" path="res://Assets/Textures/snail.png" id="3_imj8n"]
 [ext_resource type="Texture2D" uid="uid://snw41qn5l5uv" path="res://Assets/Textures/play_button.png" id="4_86efi"]
 [ext_resource type="Texture2D" uid="uid://bua31kgs6ugyi" path="res://Assets/Textures/language_button.png" id="5_j3ntq"]
-[ext_resource type="Texture2D" uid="uid://c4niio40o5d3w" path="res://Assets/Textures/player.png" id="6_i5e36"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_po5t7"]
 
 [node name="MainMenu" type="CanvasLayer"]
 script = ExtResource("1_ui45d")
@@ -23,51 +24,13 @@ grow_horizontal = 0
 grow_vertical = 0
 texture = ExtResource("1_w5dq8")
 
-[node name="TextureRect2" type="TextureRect" parent="."]
-offset_right = 512.0
-offset_bottom = 128.0
-texture = ExtResource("2_m2ov4")
-
 [node name="Cursor" type="TextureRect" parent="."]
 offset_left = 32.0
-offset_top = 336.0
+offset_top = 270.0
 offset_right = 96.0
-offset_bottom = 400.0
+offset_bottom = 334.0
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("3_imj8n")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 72.0
-offset_top = -192.0
-offset_right = 200.0
-offset_bottom = -60.0
-grow_vertical = 0
-metadata/_edit_group_ = true
-
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
-layout_mode = 2
-texture = ExtResource("4_86efi")
-
-[node name="TextureRect2" type="TextureRect" parent="VBoxContainer"]
-layout_mode = 2
-texture = ExtResource("5_j3ntq")
-
-[node name="TextureRect3" type="TextureRect" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -32.0
-offset_top = -32.0
-offset_right = 32.0
-offset_bottom = 32.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("6_i5e36")
 
 [node name="LanguageLabel" type="Label" parent="."]
 anchors_preset = 2
@@ -79,3 +42,37 @@ grow_vertical = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 text = "EN"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer2"]
+layout_mode = 2
+texture = ExtResource("2_m2ov4")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer2/HBoxContainer"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_po5t7")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 6
+metadata/_edit_group_ = true
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer2/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("4_86efi")
+
+[node name="TextureRect2" type="TextureRect" parent="VBoxContainer2/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("5_j3ntq")

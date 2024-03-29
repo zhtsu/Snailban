@@ -34,8 +34,19 @@ public partial class Level : Node2D
 		MySignals.SpaceKey += SpaceKeyDown;
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+    public override void _ExitTree()
+    {
+        base._ExitTree();
+
+		MySignals.UpKey -= UpKeyDown;
+		MySignals.DownKey -= DownKeyDown;
+		MySignals.LeftKey -= LeftKeyDown;
+		MySignals.RightKey -= RightKeyDown;
+		MySignals.SpaceKey -= SpaceKeyDown;
+    }
+
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    public override void _Process(double delta)
 	{
 	}
 

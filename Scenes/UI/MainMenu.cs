@@ -5,7 +5,7 @@ public partial class MainMenu : CanvasLayer
 {
 	private CustomSignals MySignals;
 	private int CursorIndex = 0;
-	private float[] CursorYArray = { 336, 406 };
+	private float[] CursorYArray = { 270, 340 };
 	private TextureRect Cursor;
 	private Label LanguageLable;
 
@@ -21,8 +21,17 @@ public partial class MainMenu : CanvasLayer
 		MySignals.SpaceKey += SpaceKeyDown;
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+    public override void _ExitTree()
+    {
+        base._ExitTree();
+
+		MySignals.UpKey -= UpKeyDown;
+		MySignals.DownKey -= DownKeyDown;
+		MySignals.SpaceKey -= SpaceKeyDown;
+    }
+
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    public override void _Process(double delta)
 	{
 	}
 
@@ -35,7 +44,9 @@ public partial class MainMenu : CanvasLayer
 
 		CursorIndex -= 1;
 
-		CreateTween().TweenProperty(Cursor, "position", new Vector2(32, CursorYArray[CursorIndex]), 0.4f);
+		CreateTween()
+		.TweenProperty(Cursor, "position", new Vector2(32, CursorYArray[CursorIndex]), 0.3f)
+		.SetEase(Tween.EaseType.Out);
 	}
 
 	private void DownKeyDown()
@@ -47,7 +58,9 @@ public partial class MainMenu : CanvasLayer
 
 		CursorIndex += 1;
 		
-		CreateTween().TweenProperty(Cursor, "position", new Vector2(32, CursorYArray[CursorIndex]), 0.4f);
+		CreateTween()
+		.TweenProperty(Cursor, "position", new Vector2(32, CursorYArray[CursorIndex]), 0.3f)
+		.SetEase(Tween.EaseType.Out);
 	}
 
 	private void SpaceKeyDown()
