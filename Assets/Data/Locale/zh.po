@@ -19,31 +19,19 @@ msgstr ""
 #
 
 msgid "00-00-01"
-msgstr "我刚才在这边看到了一只蜗牛"
+msgstr "哇！有一只漂亮的蜗牛"
 
-msgid "00-00-02"
-msgstr "我要把它找出来"
-
-msgid "00-00-03"
-msgstr "找到你了！"
-
-msgid "00-01-04"
-msgstr "你让本蜗牛很不爽"
-
-msgid "00-01-05"
-msgstr "掌管蜗牛的神将会惩罚你！"
-
-msgid "00-00-06"
-msgstr "什么？"
+msgid "00-01-02"
+msgstr "！！！！！！"
 
 msgid "00-00-07"
-msgstr "这是什么地方？"
+msgstr "这是哪里？"
 
 msgid "00-00-08"
 msgstr "不管怎样"
 
 msgid "00-00-09"
-msgstr "我想要回家"
+msgstr "我想回家"
 
 msgid "00-00-10"
-msgstr "我应该想办法离开这里"
+msgstr "我应该做点什么离开这里"

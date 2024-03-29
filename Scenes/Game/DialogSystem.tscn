@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://btjnsrnt2u6ec"]
+
+[ext_resource type="Script" path="res://Scenes/Game/DialogSystem.cs" id="1_b4fsr"]
+
+[node name="DialogSystem" type="Node"]
+script = ExtResource("1_b4fsr")

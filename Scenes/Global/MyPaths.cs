@@ -18,4 +18,9 @@ public partial class MyPaths : Node
     {
         return ProjectSettings.GlobalizePath("res://Scenes/Element/") + File;
     }
+
+    public static string GenTexturePath(string File)
+    {
+        return ProjectSettings.GlobalizePath("res://Assets/Textures/") + File;
+    }
 }

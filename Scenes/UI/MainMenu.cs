@@ -1,11 +1,12 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class MainMenu : CanvasLayer
 {
 	private CustomSignals MySignals;
 	private int CursorIndex = 0;
-	private float[] CursorYArray = { 270, 340 };
+	private float[] CursorYArray = { 216, 286, 354 };
 	private TextureRect Cursor;
 	private Label LanguageLable;
 
@@ -19,6 +20,9 @@ public partial class MainMenu : CanvasLayer
 		MySignals.UpKey += UpKeyDown;
 		MySignals.DownKey += DownKeyDown;
 		MySignals.SpaceKey += SpaceKeyDown;
+
+		Texture2D CursorTexture = (Texture2D)GD.Load(ConfigData.SnailTexturePaths.PickRandom());
+		Cursor.Texture = CursorTexture;
 	}
 
     public override void _ExitTree()
@@ -45,13 +49,13 @@ public partial class MainMenu : CanvasLayer
 		CursorIndex -= 1;
 
 		CreateTween()
-		.TweenProperty(Cursor, "position", new Vector2(32, CursorYArray[CursorIndex]), 0.3f)
+		.TweenProperty(Cursor, "position", new Vector2(96, CursorYArray[CursorIndex]), 0.3f)
 		.SetEase(Tween.EaseType.Out);
 	}
 
 	private void DownKeyDown()
 	{
-		if (CursorIndex == 1)
+		if (CursorIndex == 2)
 		{
 			return;
 		}
@@ -59,7 +63,7 @@ public partial class MainMenu : CanvasLayer
 		CursorIndex += 1;
 		
 		CreateTween()
-		.TweenProperty(Cursor, "position", new Vector2(32, CursorYArray[CursorIndex]), 0.3f)
+		.TweenProperty(Cursor, "position", new Vector2(96, CursorYArray[CursorIndex]), 0.3f)
 		.SetEase(Tween.EaseType.Out);
 	}
 
@@ -67,17 +71,26 @@ public partial class MainMenu : CanvasLayer
 	{
 		if (CursorIndex == 0)
 		{
-			StartGame();
+			NewGame();
 		}
 		else if (CursorIndex == 1)
+		{
+			LastMaxLevel();
+		}
+		else if (CursorIndex == 2)
 		{
 			SwitchLanguage();
 		}
 	}
 
-	private void StartGame()
+	private void NewGame()
 	{
 		MySignals.EmitSignal("LevelStarted", 0);
+	}
+
+	private void LastMaxLevel()
+	{
+
 	}
 
 	private void SwitchLanguage()

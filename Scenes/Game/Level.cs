@@ -19,7 +19,7 @@ public partial class Level : Node2D
 		// The variable 'MapBean' will updated when the game state was changed
 		if (ConfigData.MapBeanDict.TryGetValue(MapId, out MapBean) == false)
 		{
-			GD.PushWarning("Invalid ID of map! ID: " + MapId.ToString());
+			GD.PushWarning("Invalid map id! id: " + MapId.ToString());
 			return;
 		}
 

@@ -7,11 +7,13 @@ public partial class ConfigData : Node
     // All .tscn file path of Elements
     public static Dictionary<int, ElementBean> ElementBeanDict = new Dictionary<int, ElementBean>();
     public static Dictionary<int, FMapBean> MapBeanDict = new Dictionary<int, FMapBean>();
+    public static Godot.Collections.Array<string> SnailTexturePaths = new Godot.Collections.Array<string>();
 
     public override void _Ready()
 	{
         LoadMapData();
         LoadElementData();
+        LoadSnailTexturePaths();
 	}
 
     public void LoadMapData()
@@ -84,5 +86,14 @@ public partial class ConfigData : Node
         }
 
         return RetVal;
+    }
+
+    public void LoadSnailTexturePaths()
+    {
+        List<string> SnailTextureFiles = MyMethods.LoadTxtToList(MyPaths.GenDataPath("snail_textures.list"));
+        foreach (string SnailTextureFile in SnailTextureFiles)
+        {
+            SnailTexturePaths.Add(MyPaths.GenTexturePath(SnailTextureFile));
+        }
     }
 }

@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://c5cqlx8g24oi3"]
+[gd_scene load_steps=9 format=3 uid="uid://c5cqlx8g24oi3"]
 
 [ext_resource type="Script" path="res://Scenes/UI/MainMenu.cs" id="1_ui45d"]
 [ext_resource type="Texture2D" uid="uid://cablhqqpabta1" path="res://Assets/Textures/keyboard.png" id="1_w5dq8"]
 [ext_resource type="Texture2D" uid="uid://ctd1doupbxga0" path="res://Assets/Textures/title.png" id="2_m2ov4"]
-[ext_resource type="Texture2D" uid="uid://djseaxgg2eyu0" path="res://Assets/Textures/snail.png" id="3_imj8n"]
-[ext_resource type="Texture2D" uid="uid://snw41qn5l5uv" path="res://Assets/Textures/play_button.png" id="4_86efi"]
+[ext_resource type="Texture2D" uid="uid://din0nxmelkt21" path="res://Assets/Textures/rainbow_snail.png" id="3_1kpx8"]
+[ext_resource type="Texture2D" uid="uid://devbhjyis4pu5" path="res://Assets/Textures/last_button.png" id="5_c7ff2"]
+[ext_resource type="Texture2D" uid="uid://4ubkqh77drms" path="res://Assets/Textures/new_button.png" id="5_ckn0w"]
 [ext_resource type="Texture2D" uid="uid://bua31kgs6ugyi" path="res://Assets/Textures/language_button.png" id="5_j3ntq"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_po5t7"]
@@ -25,12 +26,12 @@ grow_vertical = 0
 texture = ExtResource("1_w5dq8")
 
 [node name="Cursor" type="TextureRect" parent="."]
-offset_left = 32.0
-offset_top = 270.0
-offset_right = 96.0
-offset_bottom = 334.0
+offset_left = 96.0
+offset_top = 216.0
+offset_right = 160.0
+offset_bottom = 280.0
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("3_imj8n")
+texture = ExtResource("3_1kpx8")
 
 [node name="LanguageLabel" type="Label" parent="."]
 anchors_preset = 2
@@ -54,12 +55,19 @@ grow_vertical = 2
 layout_mode = 2
 texture = ExtResource("2_m2ov4")
 
+[node name="Label" type="Label" parent="VBoxContainer2"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "by zhtsu"
+
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2"]
 layout_mode = 2
-size_flags_vertical = 3
 
 [node name="VSeparator" type="VSeparator" parent="VBoxContainer2/HBoxContainer"]
-custom_minimum_size = Vector2(64, 0)
+custom_minimum_size = Vector2(128, 0)
 layout_mode = 2
 theme_override_styles/separator = SubResource("StyleBoxEmpty_po5t7")
 
@@ -71,8 +79,12 @@ metadata/_edit_group_ = true
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer2/HBoxContainer/VBoxContainer"]
 layout_mode = 2
-texture = ExtResource("4_86efi")
+texture = ExtResource("5_ckn0w")
 
 [node name="TextureRect2" type="TextureRect" parent="VBoxContainer2/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("5_c7ff2")
+
+[node name="TextureRect3" type="TextureRect" parent="VBoxContainer2/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 texture = ExtResource("5_j3ntq")

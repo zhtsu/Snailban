@@ -9,6 +9,7 @@ public partial class DialogBox : CanvasLayer
 		Right
 	}
 
+	private Speaker ActiveSpeaker = Speaker.Left;
 	private TextureRect LeftAvatar;
 	private TextureRect RightAvatar;
 	private Label WordLabel;
@@ -22,18 +23,27 @@ public partial class DialogBox : CanvasLayer
 		WordLabel = GetNode<Label>("Box/WordLabel");
 		AnimPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 		
+		RightAvatar.Visible = false;
+	}
+
+	public void Enter()
+	{
 		AnimPlayer.Play("Enter");
 	}
 
 	public void Exit()
 	{
-		
+		AnimPlayer.Play("Exit");
 	}
 
 	public void Speak(Speaker CurrentSpeaker, string Word)
 	{
-		LeftAvatar.Visible = (CurrentSpeaker == Speaker.Left);
-		RightAvatar.Visible = (CurrentSpeaker == Speaker.Right);
+		if (CurrentSpeaker != ActiveSpeaker)
+		{
+			LeftAvatar.Visible = (CurrentSpeaker == Speaker.Left);
+			RightAvatar.Visible = (CurrentSpeaker == Speaker.Right);
+		}
+		
 		WordLabel.Text = Word;
 	}
 }

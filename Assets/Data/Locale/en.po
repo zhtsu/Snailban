@@ -20,22 +20,10 @@ msgstr ""
 #
 
 msgid "00-00-01"
-msgstr "I saw a snail here just now"
+msgstr "WOW! A beautiful snail"
 
-msgid "00-00-02"
-msgstr "Let's find it out"
-
-msgid "00-00-03"
-msgstr "I got you !"
-
-msgid "00-01-04"
-msgstr "You make me feel bad"
-
-msgid "00-01-05"
-msgstr "The Snail Deity will punish you !"
-
-msgid "00-00-06"
-msgstr "What ?"
+msgid "00-01-02"
+msgstr "! ! ! ! ! !"
 
 msgid "00-00-07"
 msgstr "Where is here ?"
@@ -47,4 +35,4 @@ msgid "00-00-09"
 msgstr "I want to go home"
 
 msgid "00-00-10"
-msgstr "I should find a way to leave here"
+msgstr "I should do something to leave here"

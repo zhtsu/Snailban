@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://snw41qn5l5uv"
-path="res://.godot/imported/play_button.png-5e7e26df520b8377124f49e8cf44f2bd.ctex"
+uid="uid://din0nxmelkt21"
+path="res://.godot/imported/rainbow_snail.png-ea8f09de16082c407a95b4c494d95677.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Textures/play_button.png"
-dest_files=["res://.godot/imported/play_button.png-5e7e26df520b8377124f49e8cf44f2bd.ctex"]
+source_file="res://Assets/Textures/rainbow_snail.png"
+dest_files=["res://.godot/imported/rainbow_snail.png-ea8f09de16082c407a95b4c494d95677.ctex"]
 
 [params]
 
