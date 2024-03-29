@@ -16,24 +16,35 @@ public partial class ConfigData : Node
 
     public void LoadMapData()
     {
-        List<string> MapFiles = MyMethods.LoadTxtToList(MyPaths.GenMapDataPath("all.maps"));
-        foreach(string MapFile in MapFiles)
+        string FilePath = MyPaths.GenMapDataPath("maps.table");
+        Dictionary<string, List<string>> Dict = MyMethods.LoadCsv(FilePath);
+
+        List<string> Numbers = Dict["ID"];
+        List<string> Filenames = Dict["FILENAME"];
+        if (Numbers.Count != Filenames.Count)
         {
-            FMapBean MapData = LoadMapBeanFromFile(MyPaths.GenMapDataPath(MapFile));
-            MapBeanDict.Add(MapData.Id, MapData);
+            GD.PrintErr("CSV file format error! File: ", FilePath);
+            return;
+        }
+
+        for (int i = 0; i < Filenames.Count; i++)
+        {
+            FMapBean MapData = LoadMapBeanFromFile(MyPaths.GenMapDataPath(Filenames[i]));
+            MapBeanDict.Add(Int32.Parse(Numbers[i]), MapData);
         }
     }
 
     public void LoadElementData()
     {
-        Dictionary<string, List<string>> Dict = MyMethods.LoadCsv(MyPaths.GenDataPath("elements.csv"));
+        string FilePath = MyPaths.GenDataPath("elements.table");
+        Dictionary<string, List<string>> Dict = MyMethods.LoadCsv(FilePath);
         
         List<string> Ids = Dict["ID"];
         List<string> Names = Dict["NAME"];
         List<string> Paths = Dict["PATH"];
         if ((Ids.Count == Names.Count && Names.Count == Paths.Count) == false)
         {
-            GD.PrintErr("CSV file format error!");
+            GD.PrintErr("CSV file format error! File: ", FilePath);
             return;
         }
 
@@ -50,7 +61,6 @@ public partial class ConfigData : Node
         Godot.Collections.Dictionary MapDataDict = MyMethods.LoadJson(FilePath);
         
         FMapBean RetVal = new FMapBean();
-        RetVal.Id = (int)MapDataDict["id"];
         RetVal.Name = (string)MapDataDict["name"];
         RetVal.Row = (int)MapDataDict["row"];
         RetVal.Column = (int)MapDataDict["column"];

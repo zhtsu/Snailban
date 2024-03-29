@@ -1,0 +1,50 @@
+# LANGUAGE translation for Snail City
+#
+# FIRST AUTHOR < EMAIL @ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Snail City\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2024-03-29 14:40+0800\n"
+"Last-Translator: <EMAIL@ADDRESS>\n"
+"Language-Team: English\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+#
+# msgid format: level-character-number
+#
+
+msgid "00-00-01"
+msgstr "I saw a snail here just now"
+
+msgid "00-00-02"
+msgstr "Let's find it out"
+
+msgid "00-00-03"
+msgstr "I got you !"
+
+msgid "00-01-04"
+msgstr "You make me feel bad"
+
+msgid "00-01-05"
+msgstr "The Snail Deity will punish you !"
+
+msgid "00-00-06"
+msgstr "What ?"
+
+msgid "00-00-07"
+msgstr "Where is here ?"
+
+msgid "00-00-08"
+msgstr "Anyway"
+
+msgid "00-00-09"
+msgstr "I want to go home"
+
+msgid "00-00-10"
+msgstr "I should find a way to leave here"

@@ -17,4 +17,7 @@ public partial class CustomSignals : Node
 
     [Signal]
     public delegate void SpaceKeyEventHandler();
+
+    [Signal]
+    public delegate void LevelStartedEventHandler(int MapId);
 }

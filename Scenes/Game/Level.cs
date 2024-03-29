@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public partial class Level : Node2D
 {
 	[Export]
-	public int Id;
+	public int MapId;
 	private FMapBean MapBean;
 	private Dictionary<int, PackedScene> PreloadedElementDict = new Dictionary<int, PackedScene>();
 	private Player MyPlayer;
@@ -17,9 +17,9 @@ public partial class Level : Node2D
 	{
 		// Initialize the map bean
 		// The variable 'MapBean' will updated when the game state was changed
-		if (ConfigData.MapBeanDict.TryGetValue(Id, out MapBean) == false)
+		if (ConfigData.MapBeanDict.TryGetValue(MapId, out MapBean) == false)
 		{
-			GD.PushWarning("Invalid ID of map! ID: " + Id.ToString());
+			GD.PushWarning("Invalid ID of map! ID: " + MapId.ToString());
 			return;
 		}
 

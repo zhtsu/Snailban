@@ -69,7 +69,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("6_i5e36")
 
-[node name="Label" type="Label" parent="."]
+[node name="LanguageLabel" type="Label" parent="."]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0

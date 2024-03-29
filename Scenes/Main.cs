@@ -9,6 +9,8 @@ public partial class Main : Node
 	public override void _Ready()
 	{
 		MySignals = GetNode<CustomSignals>("/root/CustomSignals");
+
+		MySignals.LevelStarted += LoadLevel;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -44,4 +46,9 @@ public partial class Main : Node
 			}
 		}
     }
+
+	private void LoadLevel(int MapId)
+	{
+		GD.Print(MapId);
+	}
 }

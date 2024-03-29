@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dt7n50ftnvbxg"]
 
 [ext_resource type="Script" path="res://Scenes/Main.cs" id="1_lv35f"]
-[ext_resource type="PackedScene" uid="uid://c8vgyic4iejk7" path="res://Scenes/Game/Level.tscn" id="2_ah1yp"]
+[ext_resource type="PackedScene" uid="uid://c5cqlx8g24oi3" path="res://Scenes/UI/MainMenu.tscn" id="2_ilaps"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_lv35f")
@@ -16,4 +16,4 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Level" parent="." instance=ExtResource("2_ah1yp")]
+[node name="MainMenu" parent="." instance=ExtResource("2_ilaps")]
