@@ -1,4 +1,4 @@
-# SnailCity
+# Snailban
 A Sokoban like game made with Godot Engine(C#)
 
 ## Environment

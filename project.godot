@@ -31,7 +31,7 @@ window/stretch/mode="canvas_items"
 
 [dotnet]
 
-project/assembly_name="SnailCity"
+project/assembly_name="Snailban"
 
 [editor_plugins]
 

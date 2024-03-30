@@ -1,6 +1,6 @@
 ﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnailCity", "SnailCity.csproj", "{575ED7CB-7AC9-4684-A37F-A58D8CCDBBBE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snailban", "Snailban.csproj", "{575ED7CB-7AC9-4684-A37F-A58D8CCDBBBE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
