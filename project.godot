@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="SnailCity"
+config/name="Snailban"
 run/main_scene="res://Scenes/Main.tscn"
 config/features=PackedStringArray("4.2", "C#", "Mobile")
 config/icon="res://icon.svg"

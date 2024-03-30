@@ -8,14 +8,12 @@ public partial class MainMenu : CanvasLayer
 	private int CursorIndex = 0;
 	private float[] CursorYArray = { 216, 286, 354 };
 	private TextureRect Cursor;
-	private Label LanguageLable;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		MySignals = GetNode<CustomSignals>("/root/CustomSignals");
 		Cursor = GetNode<TextureRect>("Cursor");
-		LanguageLable = GetNode<Label>("LanguageLabel");
 
 		MySignals.UpKey += UpKeyDown;
 		MySignals.DownKey += DownKeyDown;
@@ -49,7 +47,7 @@ public partial class MainMenu : CanvasLayer
 		CursorIndex -= 1;
 
 		CreateTween()
-		.TweenProperty(Cursor, "position", new Vector2(96, CursorYArray[CursorIndex]), 0.3f)
+		.TweenProperty(Cursor, "position", new Vector2(64, CursorYArray[CursorIndex]), 0.3f)
 		.SetEase(Tween.EaseType.Out);
 	}
 
@@ -63,7 +61,7 @@ public partial class MainMenu : CanvasLayer
 		CursorIndex += 1;
 		
 		CreateTween()
-		.TweenProperty(Cursor, "position", new Vector2(96, CursorYArray[CursorIndex]), 0.3f)
+		.TweenProperty(Cursor, "position", new Vector2(64, CursorYArray[CursorIndex]), 0.3f)
 		.SetEase(Tween.EaseType.Out);
 	}
 
@@ -79,7 +77,7 @@ public partial class MainMenu : CanvasLayer
 		}
 		else if (CursorIndex == 2)
 		{
-			SwitchLanguage();
+			ExitGame();
 		}
 	}
 
@@ -93,15 +91,8 @@ public partial class MainMenu : CanvasLayer
 
 	}
 
-	private void SwitchLanguage()
+	private void ExitGame()
 	{
-		if (LanguageLable.Text == "EN")
-		{
-			LanguageLable.Text = "ZH";
-		}
-		else if (LanguageLable.Text == "ZH")
-		{
-			LanguageLable.Text = "EN";
-		}
+		GetTree().Quit();
 	}
 }

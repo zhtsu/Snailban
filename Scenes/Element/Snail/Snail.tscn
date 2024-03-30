@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://cuahdrnobl742"]
+
+[ext_resource type="PackedScene" uid="uid://bntklxb5spt38" path="res://Scenes/Element/Element.tscn" id="1_qt3xn"]
+
+[node name="Snail" instance=ExtResource("1_qt3xn")]

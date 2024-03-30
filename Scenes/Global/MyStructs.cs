@@ -33,12 +33,6 @@ public struct ElementBean
     }
 }
 
-public struct DialogueBean
-{
-    public DialogBox.Speaker Speaker;
-    public string Word;
-}
-
 public partial class MyStructs : Node
 {
     
