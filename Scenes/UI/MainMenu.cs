@@ -83,7 +83,7 @@ public partial class MainMenu : CanvasLayer
 
 	private void NewGame()
 	{
-		MySignals.EmitSignal("LevelStarted", 0);
+		MySignals.EmitSignal("LevelStarted", 1);
 	}
 
 	private void LastMaxLevel()

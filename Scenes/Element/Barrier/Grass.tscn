@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://c38nbkd0nddyv"]
+[gd_scene load_steps=4 format=3 uid="uid://c38nbkd0nddyv"]
 
 [ext_resource type="PackedScene" uid="uid://bntklxb5spt38" path="res://Scenes/Element/Element.tscn" id="1_y85hb"]
+[ext_resource type="Script" path="res://Scenes/Element/Barrier/Grass.cs" id="2_dw3g8"]
 [ext_resource type="Texture2D" uid="uid://do661otg51chn" path="res://Assets/Textures/grass.png" id="2_qjct2"]
 
 [node name="Grass" instance=ExtResource("1_y85hb")]
+script = ExtResource("2_dw3g8")
 
 [node name="Body" parent="." index="0"]
 texture = ExtResource("2_qjct2")

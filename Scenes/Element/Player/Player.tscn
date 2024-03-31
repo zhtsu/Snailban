@@ -27,6 +27,7 @@ _data = {
 }
 
 [node name="Player" instance=ExtResource("1_84i00")]
+z_index = 1
 script = ExtResource("1_y71hb")
 
 [node name="Body" parent="." index="0"]

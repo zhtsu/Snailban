@@ -10,6 +10,10 @@ public partial class Level : Node2D
 	private FMapBean MapBean;
 	private Dictionary<int, PackedScene> PreloadedElementDict = new Dictionary<int, PackedScene>();
 	private Player MyPlayer;
+    private Element[,] MapMatrix = new Element[8, 8];
+	// Uecord the initial value of the map
+	// Used to recover the Matrix's value when the player leave from a location
+	private Element[,] MapMatrixBak = new Element[8, 8];
 	private CustomSignals MySignals;
 
 	// Called when the node enters the scene tree for the first time.
@@ -72,12 +76,15 @@ public partial class Level : Node2D
 					if (PreloadedElementDict.TryGetValue(ElementId, out PackedScene ElementScene))
 					{
 						Element MyElement = (Element)ElementScene.Instantiate();
+						MapMatrix[j, k] = MyElement;
+						MapMatrixBak[j, k] = MyElement;
 						MyElement.Id = MyElementBean.Id;
 						MyElement.Name = MyElementBean.Name;
 						if (MyElementBean.Name == "Player")
 						{
 							MyPlayer = (Player)MyElement;
 							MyPlayer.Location = Location;
+							MapMatrixBak[j, k] = null;
 						}
 						MyElement.Position = new Vector2(MapBean.TileWidth * j, MapBean.TileHeight * k);
 						AddChild(MyElement);
@@ -107,24 +114,117 @@ public partial class Level : Node2D
 		}
 	}
 
+	private void UpdatePlayerPosition(System.Numerics.Vector2 OldLocation)
+	{
+		Vector2 NewPosition = new Vector2(
+			MyPlayer.Location.X * 64,
+			MyPlayer.Location.Y * 64
+		);
+
+		MapMatrix[(int)OldLocation.X, (int)OldLocation.Y] = MapMatrixBak[(int)OldLocation.X, (int)OldLocation.Y];
+		MapMatrix[(int)MyPlayer.Location.X, (int)MyPlayer.Location.Y] = MyPlayer;
+
+		CreateTween()
+		.TweenProperty(MyPlayer, "position", NewPosition, 0.2f)
+		.SetEase(Tween.EaseType.Out)
+		.Connect("finished", new Callable(this, nameof(ResetPlayerMoving)));
+	}
+
+	private bool GetFacedElement(Direction MovementDirection, out Element FacingElement)
+	{
+		int X = (int)MyPlayer.Location.X;
+		int Y = (int)MyPlayer.Location.Y;
+		switch (MovementDirection)
+		{
+			case Direction.Up: 		Y -= 1; break;
+			case Direction.Down:	Y += 1; break;
+			case Direction.Left:	X -= 1; break;
+			case Direction.Right:	X += 1; break;
+		}
+		
+		if (X < 0 || X > 7 || Y < 0 || Y > 7)
+		{
+			FacingElement = null;
+			return false;
+		}
+
+		FacingElement = MapMatrix[X, Y];
+		GD.Print(FacingElement);
+		return true;
+	}
+
+	// Access and check the element in front of the player
+	// If player can move and will return true
+	private bool HandleFacedElement(Direction MovementDirection)
+	{
+		if (GetFacedElement(MovementDirection, out Element FacingElement) == false)
+		{
+			return false;
+		}
+
+		if (FacingElement != null && FacingElement.Type == ElementType.Barrier)
+		{
+			return false;
+		}
+		
+		return true;
+	}
+
 	private void UpKeyDown()
 	{
-		GD.Print("UP");
+		if (MyPlayer.Moving || HandleFacedElement(Direction.Up) == false)
+		{
+			return;
+		}
+
+		System.Numerics.Vector2 OldLocation = MyPlayer.Location;
+		MyPlayer.Location.Y -= 1;
+		MyPlayer.Moving = true;
+		UpdatePlayerPosition(OldLocation);
 	}
 
 	private void DownKeyDown()
 	{
-		GD.Print("Down");
+		if (MyPlayer.Moving || HandleFacedElement(Direction.Down) == false)
+		{
+			return;
+		}
+
+		System.Numerics.Vector2 OldLocation = MyPlayer.Location;
+		MyPlayer.Location.Y += 1;
+		MyPlayer.Moving = true;
+		UpdatePlayerPosition(OldLocation);
 	}
 
 	private void LeftKeyDown()
 	{
-		GD.Print("LEFT");
+		if (MyPlayer.Moving || HandleFacedElement(Direction.Left) == false)
+		{
+			return;
+		}
+
+		System.Numerics.Vector2 OldLocation = MyPlayer.Location;
+		MyPlayer.Location.X -= 1;
+		MyPlayer.Moving = true;
+		UpdatePlayerPosition(OldLocation);
 	}
 
 	private void RightKeyDown()
 	{
-		GD.Print("RIGHT");
+		if (MyPlayer.Moving || HandleFacedElement(Direction.Right) == false)
+		{
+			return;
+		}
+
+		System.Numerics.Vector2 OldLocation = MyPlayer.Location;
+		MyPlayer.Location.X += 1;
+		MyPlayer.Moving = true;
+		UpdatePlayerPosition(OldLocation);
+	}
+
+	private void ResetPlayerMoving()
+	{
+		MyPlayer.Moving = false;
 	}
 
 	private void SpaceKeyDown()
