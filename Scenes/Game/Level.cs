@@ -57,7 +57,7 @@ public partial class Level : Node2D
 
 	private void InitMap()
 	{
-		System.Numerics.Vector2 Location = new System.Numerics.Vector2(0, 0);
+		Vector2 Location = new Vector2(0, 0);
 
 		for (int i = 0; i < MapBean.LayerCount; i++)
 		{
@@ -79,11 +79,11 @@ public partial class Level : Node2D
 						MapMatrix[j, k] = MyElement;
 						MapMatrixBak[j, k] = MyElement;
 						MyElement.Id = MyElementBean.Id;
+						MyElement.Location = Location;
 						MyElement.Name = MyElementBean.Name;
 						if (MyElementBean.Name == "Player")
 						{
 							MyPlayer = (Player)MyElement;
-							MyPlayer.Location = Location;
 							MapMatrixBak[j, k] = null;
 						}
 						MyElement.Position = new Vector2(MapBean.TileWidth * j, MapBean.TileHeight * k);
@@ -114,35 +114,38 @@ public partial class Level : Node2D
 		}
 	}
 
-	private void UpdatePlayerPosition(System.Numerics.Vector2 OldLocation)
+	private void UpdateElementPosition(Element MovedElement, Vector2 OldLocation, Vector2 NewLocation)
 	{
-		Vector2 NewPosition = new Vector2(
-			MyPlayer.Location.X * 64,
-			MyPlayer.Location.Y * 64
-		);
+		Vector2 NewPosition = NewLocation * 64;
+		
+		if (MovedElement.Type == ElementType.Effect)
+		{
+			MapMatrix[(int)OldLocation.X, (int)OldLocation.Y] = MapMatrixBak[(int)OldLocation.X, (int)OldLocation.Y];
+		}
+		else
+		{
+			MapMatrix[(int)OldLocation.X, (int)OldLocation.Y] = null;
+		}
+		MapMatrix[(int)NewLocation.X, (int)NewLocation.Y] = MovedElement;
 
-		MapMatrix[(int)OldLocation.X, (int)OldLocation.Y] = MapMatrixBak[(int)OldLocation.X, (int)OldLocation.Y];
-		MapMatrix[(int)MyPlayer.Location.X, (int)MyPlayer.Location.Y] = MyPlayer;
-
-		CreateTween()
-		.TweenProperty(MyPlayer, "position", NewPosition, 0.2f)
-		.SetEase(Tween.EaseType.Out)
-		.Connect("finished", new Callable(this, nameof(ResetPlayerMoving)));
+		if (MovedElement.Type == ElementType.Player)
+		{
+			CreateTween()
+			.TweenProperty(MovedElement, "position", NewPosition, 0.2f)
+			.SetEase(Tween.EaseType.Out)
+			.Connect("finished", new Callable(this, nameof(ResetPlayerMoving)));
+		}
+		else
+		{
+			CreateTween()
+			.TweenProperty(MovedElement, "position", NewPosition, 0.2f)
+			.SetEase(Tween.EaseType.Out);
+		}
 	}
 
-	private bool GetFacedElement(Direction MovementDirection, out Element FacingElement)
+	private bool GetFacedElement(Element CheckedElement, Direction MovementDirection, out Element FacingElement)
 	{
-		int X = (int)MyPlayer.Location.X;
-		int Y = (int)MyPlayer.Location.Y;
-		switch (MovementDirection)
-		{
-			case Direction.Up: 		Y -= 1; break;
-			case Direction.Down:	Y += 1; break;
-			case Direction.Left:	X -= 1; break;
-			case Direction.Right:	X += 1; break;
-		}
-		
-		if (X < 0 || X > 7 || Y < 0 || Y > 7)
+		if (IsElementCanMove(CheckedElement, MovementDirection, out int X, out int Y) == false)
 		{
 			FacingElement = null;
 			return false;
@@ -157,7 +160,7 @@ public partial class Level : Node2D
 	// If player can move and will return true
 	private bool HandleFacedElement(Direction MovementDirection)
 	{
-		if (GetFacedElement(MovementDirection, out Element FacingElement) == false)
+		if (GetFacedElement(MyPlayer, MovementDirection, out Element FacingElement) == false)
 		{
 			return false;
 		}
@@ -165,8 +168,37 @@ public partial class Level : Node2D
 		if (FacingElement != null && FacingElement.Type == ElementType.Barrier)
 		{
 			return false;
+		} else if (FacingElement != null && FacingElement.Type == ElementType.Snail)
+		{
+			return HandleSnail((Snail)FacingElement, MovementDirection);
 		}
 		
+		return true;
+	}
+
+	public bool HandleSnail(Snail FacingSnail, Direction MovementDirection)
+	{
+		return false;
+	}
+
+	// If the element can move, will return the location after moving
+	private bool IsElementCanMove(Element MovedElement, Direction MovementDirection, out int TargetX, out int TargetY)
+	{
+		TargetX = (int)MovedElement.Location.X;
+		TargetY = (int)MovedElement.Location.Y;
+		switch (MovementDirection)
+		{
+			case Direction.Up: 		TargetY -= 1; break;
+			case Direction.Down:	TargetY += 1; break;
+			case Direction.Left:	TargetX -= 1; break;
+			case Direction.Right:	TargetX += 1; break;
+		}
+		
+		if (TargetX < 0 || TargetX > 7 || TargetY < 0 || TargetY > 7)
+		{
+			return false;
+		}
+
 		return true;
 	}
 
@@ -177,10 +209,10 @@ public partial class Level : Node2D
 			return;
 		}
 
-		System.Numerics.Vector2 OldLocation = MyPlayer.Location;
+		Vector2 OldLocation = MyPlayer.Location;
 		MyPlayer.Location.Y -= 1;
 		MyPlayer.Moving = true;
-		UpdatePlayerPosition(OldLocation);
+		UpdateElementPosition(MyPlayer, OldLocation, MyPlayer.Location);
 	}
 
 	private void DownKeyDown()
@@ -190,10 +222,10 @@ public partial class Level : Node2D
 			return;
 		}
 
-		System.Numerics.Vector2 OldLocation = MyPlayer.Location;
+		Vector2 OldLocation = MyPlayer.Location;
 		MyPlayer.Location.Y += 1;
 		MyPlayer.Moving = true;
-		UpdatePlayerPosition(OldLocation);
+		UpdateElementPosition(MyPlayer, OldLocation, MyPlayer.Location);
 	}
 
 	private void LeftKeyDown()
@@ -203,10 +235,10 @@ public partial class Level : Node2D
 			return;
 		}
 
-		System.Numerics.Vector2 OldLocation = MyPlayer.Location;
+		Vector2 OldLocation = MyPlayer.Location;
 		MyPlayer.Location.X -= 1;
 		MyPlayer.Moving = true;
-		UpdatePlayerPosition(OldLocation);
+		UpdateElementPosition(MyPlayer, OldLocation, MyPlayer.Location);
 	}
 
 	private void RightKeyDown()
@@ -216,10 +248,10 @@ public partial class Level : Node2D
 			return;
 		}
 
-		System.Numerics.Vector2 OldLocation = MyPlayer.Location;
+		Vector2 OldLocation = MyPlayer.Location;
 		MyPlayer.Location.X += 1;
 		MyPlayer.Moving = true;
-		UpdatePlayerPosition(OldLocation);
+		UpdateElementPosition(MyPlayer, OldLocation, MyPlayer.Location);
 	}
 
 	private void ResetPlayerMoving()

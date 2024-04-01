@@ -8,7 +8,6 @@ public partial class Player : Element
 	private Timer BlinkTimer;
 	private bool FirstBlink = true;
 	public bool Moving = false;
-	public System.Numerics.Vector2 Location = new System.Numerics.Vector2(0, 0);
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

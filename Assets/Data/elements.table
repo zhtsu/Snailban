@@ -1,3 +1,4 @@
 ID,NAME,PATH
 "0","Player","res://Scenes/Element/Player/Player.tscn"
 "1","Grass","res://Scenes/Element/Barrier/Grass.tscn"
+"2","Snail","res://Scenes/Element/Snail/Snail.tscn"
