@@ -7,4 +7,5 @@ public partial class Element : Node2D
 	public string DisplayName = "Element";
 	public ElementType Type = ElementType.None;
 	public Vector2 Location;
+	public bool Moving = false;
 }

@@ -7,7 +7,6 @@ public partial class Player : Element
 	private AnimationPlayer AnimPlayer;
 	private Timer BlinkTimer;
 	private bool FirstBlink = true;
-	public bool Moving = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

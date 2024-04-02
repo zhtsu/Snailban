@@ -15,6 +15,7 @@ public partial class Level : Node2D
 	// Used to recover the Matrix's value when the player leave from a location
 	private Element[,] MapMatrixBak = new Element[8, 8];
 	private CustomSignals MySignals;
+	private List<Dictionary<Element, Vector2>> ElementLocationHistory;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -52,7 +53,7 @@ public partial class Level : Node2D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
 	{
-		
+
 	}
 
 	private void InitMap()
@@ -114,61 +115,67 @@ public partial class Level : Node2D
 		}
 	}
 
-	private void UpdateElementPosition(Element MovedElement, Vector2 OldLocation, Vector2 NewLocation)
+	private Vector2I GetTargetLocation(Element MovedElement, Direction MovementDirection)
 	{
-		Vector2 NewPosition = NewLocation * 64;
-		
-		if (MovedElement.Type == ElementType.Effect)
-		{
-			MapMatrix[(int)OldLocation.X, (int)OldLocation.Y] = MapMatrixBak[(int)OldLocation.X, (int)OldLocation.Y];
-		}
-		else
-		{
-			MapMatrix[(int)OldLocation.X, (int)OldLocation.Y] = null;
-		}
-		MapMatrix[(int)NewLocation.X, (int)NewLocation.Y] = MovedElement;
+		Vector2I NewLocation = (Vector2I)MovedElement.Location;
 
-		if (MovedElement.Type == ElementType.Player)
+		switch (MovementDirection)
 		{
-			CreateTween()
-			.TweenProperty(MovedElement, "position", NewPosition, 0.2f)
-			.SetEase(Tween.EaseType.Out)
-			.Connect("finished", new Callable(this, nameof(ResetPlayerMoving)));
+			case Direction.Up: 		NewLocation.Y -= 1; break;
+			case Direction.Down:	NewLocation.Y += 1; break;
+			case Direction.Left:	NewLocation.X -= 1; break;
+			case Direction.Right:	NewLocation.X += 1; break;
 		}
-		else
-		{
-			CreateTween()
-			.TweenProperty(MovedElement, "position", NewPosition, 0.2f)
-			.SetEase(Tween.EaseType.Out);
-		}
+
+		return NewLocation;
 	}
 
-	private bool GetFacedElement(Element CheckedElement, Direction MovementDirection, out Element FacingElement)
+	// This function will move the element without any check
+	// Make sure the required check was completed when call this function
+	private void MoveElement(Element MovedElement, Direction MovementDirection)
 	{
-		if (IsElementCanMove(CheckedElement, MovementDirection, out int X, out int Y) == false)
-		{
-			FacingElement = null;
-			return false;
-		}
+		MovedElement.Moving = true;
 
-		FacingElement = MapMatrix[X, Y];
-		GD.Print(FacingElement);
-		return true;
+		Vector2I OldLocation = (Vector2I)MovedElement.Location;
+		Vector2I NewLocation = GetTargetLocation(MovedElement, MovementDirection);
+
+		Vector2 NewPosition = new Vector2(NewLocation[0] * 64, NewLocation[1] * 64);
+		
+		MapMatrix[OldLocation.X, OldLocation.Y] = null;
+		MapMatrix[NewLocation.X, NewLocation.Y] = MovedElement;
+		MovedElement.Location = new Vector2(NewLocation[0], NewLocation[1]);
+
+		CreateTween()
+		.TweenProperty(MovedElement, "position", NewPosition, 0.2f)
+		.SetEase(Tween.EaseType.Out)
+		.Connect("finished", Callable.From(() => ResetElementMoving(MovedElement)));
+	}
+
+	private Element GetFacedElement(Element CheckedElement, Direction MovementDirection)
+	{
+		Vector2I TargetLocation = GetTargetLocation(CheckedElement, MovementDirection);
+		return MapMatrix[TargetLocation.X, TargetLocation.Y];
 	}
 
 	// Access and check the element in front of the player
 	// If player can move and will return true
-	private bool HandleFacedElement(Direction MovementDirection)
+	private bool HandleFacedElement(Element CheckedElement, Direction MovementDirection)
 	{
-		if (GetFacedElement(MyPlayer, MovementDirection, out Element FacingElement) == false)
+		Vector2I TargetLocation = GetTargetLocation(CheckedElement, MovementDirection);
+		int X = TargetLocation.X;
+		int Y = TargetLocation.Y;
+		
+		if (X < 0 || X > 7 || Y < 0 || Y > 7)
 		{
 			return false;
 		}
 
+		Element FacingElement = GetFacedElement(MyPlayer, MovementDirection);
 		if (FacingElement != null && FacingElement.Type == ElementType.Barrier)
 		{
 			return false;
-		} else if (FacingElement != null && FacingElement.Type == ElementType.Snail)
+		} 
+		else if (FacingElement != null && FacingElement.Type == ElementType.Snail)
 		{
 			return HandleSnail((Snail)FacingElement, MovementDirection);
 		}
@@ -178,23 +185,29 @@ public partial class Level : Node2D
 
 	public bool HandleSnail(Snail FacingSnail, Direction MovementDirection)
 	{
+		if (IsElementCanMove(FacingSnail, MovementDirection))
+		{
+			MoveElement(FacingSnail, MovementDirection);
+			return true;
+		}
+
 		return false;
 	}
 
-	// If the element can move, will return the location after moving
-	private bool IsElementCanMove(Element MovedElement, Direction MovementDirection, out int TargetX, out int TargetY)
+	// If the element can move, return the location after moving
+	private bool IsElementCanMove(Element MovedElement, Direction MovementDirection)
 	{
-		TargetX = (int)MovedElement.Location.X;
-		TargetY = (int)MovedElement.Location.Y;
-		switch (MovementDirection)
-		{
-			case Direction.Up: 		TargetY -= 1; break;
-			case Direction.Down:	TargetY += 1; break;
-			case Direction.Left:	TargetX -= 1; break;
-			case Direction.Right:	TargetX += 1; break;
-		}
+		Vector2I TargetLocation = GetTargetLocation(MovedElement, MovementDirection);
+		int X = TargetLocation.X;
+		int Y = TargetLocation.Y;
 		
-		if (TargetX < 0 || TargetX > 7 || TargetY < 0 || TargetY > 7)
+		if (X < 0 || X > 7 || Y < 0 || Y > 7)
+		{
+			return false;
+		}
+
+		Element FacedElement = GetFacedElement(MovedElement, MovementDirection);
+		if (FacedElement != null && FacedElement.Type == ElementType.Barrier)
 		{
 			return false;
 		}
@@ -204,59 +217,47 @@ public partial class Level : Node2D
 
 	private void UpKeyDown()
 	{
-		if (MyPlayer.Moving || HandleFacedElement(Direction.Up) == false)
+		if (MyPlayer.Moving || HandleFacedElement(MyPlayer, Direction.Up) == false)
 		{
 			return;
 		}
 
-		Vector2 OldLocation = MyPlayer.Location;
-		MyPlayer.Location.Y -= 1;
-		MyPlayer.Moving = true;
-		UpdateElementPosition(MyPlayer, OldLocation, MyPlayer.Location);
+		MoveElement(MyPlayer, Direction.Up);
 	}
 
 	private void DownKeyDown()
 	{
-		if (MyPlayer.Moving || HandleFacedElement(Direction.Down) == false)
+		if (MyPlayer.Moving || HandleFacedElement(MyPlayer, Direction.Down) == false)
 		{
 			return;
 		}
 
-		Vector2 OldLocation = MyPlayer.Location;
-		MyPlayer.Location.Y += 1;
-		MyPlayer.Moving = true;
-		UpdateElementPosition(MyPlayer, OldLocation, MyPlayer.Location);
+		MoveElement(MyPlayer, Direction.Down);
 	}
 
 	private void LeftKeyDown()
 	{
-		if (MyPlayer.Moving || HandleFacedElement(Direction.Left) == false)
+		if (MyPlayer.Moving || HandleFacedElement(MyPlayer, Direction.Left) == false)
 		{
 			return;
 		}
 
-		Vector2 OldLocation = MyPlayer.Location;
-		MyPlayer.Location.X -= 1;
-		MyPlayer.Moving = true;
-		UpdateElementPosition(MyPlayer, OldLocation, MyPlayer.Location);
+		MoveElement(MyPlayer, Direction.Left);
 	}
 
 	private void RightKeyDown()
 	{
-		if (MyPlayer.Moving || HandleFacedElement(Direction.Right) == false)
+		if (MyPlayer.Moving || HandleFacedElement(MyPlayer, Direction.Right) == false)
 		{
 			return;
 		}
 
-		Vector2 OldLocation = MyPlayer.Location;
-		MyPlayer.Location.X += 1;
-		MyPlayer.Moving = true;
-		UpdateElementPosition(MyPlayer, OldLocation, MyPlayer.Location);
+		MoveElement(MyPlayer, Direction.Right);
 	}
 
-	private void ResetPlayerMoving()
+	private void ResetElementMoving(Element MovedElement)
 	{
-		MyPlayer.Moving = false;
+		MovedElement.Moving = false;
 	}
 
 	private void SpaceKeyDown()
