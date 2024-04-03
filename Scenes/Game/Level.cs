@@ -15,11 +15,16 @@ public partial class Level : Node2D
 	// Used to recover the Matrix's value when the player leave from a location
 	private Element[,] MapMatrixBak = new Element[8, 8];
 	private CustomSignals MySignals;
-	private List<Dictionary<Element, Vector2>> ElementLocationHistory;
+	private Dictionary<int, Dictionary<Element, Vector2I>> ElementLocationHistory;
+	private int StepCount = 0;
+	private Label StepCountLabel;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		ElementLocationHistory = new Dictionary<int, Dictionary<Element, Vector2I>>();
+		StepCountLabel = GetNode<Label>("CanvasLayer/StepCount");
+
 		// Initialize the map bean
 		// The variable 'MapBean' will updated when the game state was changed
 		if (ConfigData.MapBeanDict.TryGetValue(MapId, out MapBean) == false)
@@ -58,7 +63,7 @@ public partial class Level : Node2D
 
 	private void InitMap()
 	{
-		Vector2 Location = new Vector2(0, 0);
+		Vector2I Location = new Vector2I(0, 0);
 
 		for (int i = 0; i < MapBean.LayerCount; i++)
 		{
@@ -139,11 +144,43 @@ public partial class Level : Node2D
 		Vector2I OldLocation = (Vector2I)MovedElement.Location;
 		Vector2I NewLocation = GetTargetLocation(MovedElement, MovementDirection);
 
+		int SavedStepCount = StepCount;
+		if (MovedElement.Type == ElementType.Snail)
+		{
+			// Because the snail's movable check precedes player's
+			// And when the snail can move, mean the player can also move
+			// When the player moved(After current operation), we need to let StepCount + 1
+			// So let the StepCount + 1 now to make sure the StepCount is the same for both
+			SavedStepCount += 1;
+		}
+
+		if (ElementLocationHistory.TryGetValue(SavedStepCount, out Dictionary<Element, Vector2I> AllMovedElement))
+		{
+			AllMovedElement.Add(MovedElement, OldLocation);
+		}
+		else
+		{
+			Dictionary<Element, Vector2I> Dict = new Dictionary<Element, Vector2I>();
+			Dict.Add(MovedElement, OldLocation);
+			ElementLocationHistory.Add(SavedStepCount, Dict);
+		}
+
+		MoveElementByLocation(MovedElement, NewLocation);
+	}
+
+	private void MoveElementByLocation(Element MovedElement, Vector2I NewLocation)
+	{
 		Vector2 NewPosition = new Vector2(NewLocation[0] * 64, NewLocation[1] * 64);
-		
-		MapMatrix[OldLocation.X, OldLocation.Y] = null;
+		Vector2I OldLocation = MovedElement.Location;
+
+		// When redo, the old location may have been covered by a snail element
+		// Only the element in old location is itself(Not a snail), it can be set to null
+		if (MapMatrix[OldLocation.X, OldLocation.Y] == MovedElement)
+		{
+			MapMatrix[OldLocation.X, OldLocation.Y] = null;
+		}
 		MapMatrix[NewLocation.X, NewLocation.Y] = MovedElement;
-		MovedElement.Location = new Vector2(NewLocation[0], NewLocation[1]);
+		MovedElement.Location = NewLocation;
 
 		CreateTween()
 		.TweenProperty(MovedElement, "position", NewPosition, 0.2f)
@@ -222,6 +259,9 @@ public partial class Level : Node2D
 			return;
 		}
 
+		StepCount += 1;
+		StepCountLabel.Text = StepCount.ToString();
+
 		MoveElement(MyPlayer, Direction.Up);
 	}
 
@@ -231,6 +271,9 @@ public partial class Level : Node2D
 		{
 			return;
 		}
+
+		StepCount += 1;
+		StepCountLabel.Text = StepCount.ToString();
 
 		MoveElement(MyPlayer, Direction.Down);
 	}
@@ -242,6 +285,9 @@ public partial class Level : Node2D
 			return;
 		}
 
+		StepCount += 1;
+		StepCountLabel.Text = StepCount.ToString();
+
 		MoveElement(MyPlayer, Direction.Left);
 	}
 
@@ -251,6 +297,9 @@ public partial class Level : Node2D
 		{
 			return;
 		}
+
+		StepCount += 1;
+		StepCountLabel.Text = StepCount.ToString();
 
 		MoveElement(MyPlayer, Direction.Right);
 	}
@@ -262,6 +311,24 @@ public partial class Level : Node2D
 
 	private void SpaceKeyDown()
 	{
-		GD.Print("SPACE");
+		if (ElementLocationHistory.Count == 0)
+		{
+			return;
+		}
+
+		if (ElementLocationHistory.TryGetValue(StepCount, out Dictionary<Element, Vector2I> AllMovedElement) == false)
+		{
+			return;
+		}
+
+		foreach (Element Key in AllMovedElement.Keys)
+		{
+			AllMovedElement.TryGetValue(Key, out Vector2I OldLocation);
+			MoveElementByLocation(Key, OldLocation);
+		}
+
+		ElementLocationHistory.Remove(StepCount);
+		StepCount -= 1;
+		StepCountLabel.Text = StepCount.ToString();
 	}
 }
