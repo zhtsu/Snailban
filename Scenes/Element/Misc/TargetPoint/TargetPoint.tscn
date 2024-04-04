@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://bpudn21vmp4bi"]
+
+[ext_resource type="PackedScene" uid="uid://bntklxb5spt38" path="res://Scenes/Element/Element.tscn" id="1_3inql"]
+[ext_resource type="Script" path="res://Scenes/Element/Misc/TargetPoint/TargetPoint.cs" id="2_3odbu"]
+
+[node name="TargetPoint" instance=ExtResource("1_3inql")]
+modulate = Color(1, 1, 1, 0.4)
+script = ExtResource("2_3odbu")
+Kind = 0

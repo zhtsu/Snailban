@@ -20,6 +20,19 @@ public enum ElementType
     Effect
 }
 
+public enum SnailKind
+{
+    None,
+    Normal,
+    Rainbow,
+    Fire,
+    Dark,
+    Water,
+    Noble,
+    Leaf,
+    Metal
+}
+
 public partial class MyEnums : Node
 {
 	

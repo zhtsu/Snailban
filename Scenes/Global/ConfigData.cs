@@ -64,24 +64,15 @@ public partial class ConfigData : Node
         
         FMapBean RetVal = new FMapBean();
         RetVal.Name = (string)MapDataDict["name"];
-        RetVal.Row = (int)MapDataDict["row"];
-        RetVal.Column = (int)MapDataDict["column"];
-        RetVal.TileWidth = (int)MapDataDict["tile_width"];
-        RetVal.TileHeight = (int)MapDataDict["tile_height"];
-        RetVal.LayerCount = (int)MapDataDict["layer_count"];
-        Godot.Collections.Array LayersArray = (Godot.Collections.Array)MapDataDict["layers"];
-        RetVal.Layers = new int[LayersArray.Count, RetVal.Row, RetVal.Column];
+        Godot.Collections.Array Array = (Godot.Collections.Array)MapDataDict["matrix"];
+        RetVal.Matrix = new int[8, 8];
 
-        for (int i = 0; i < LayersArray.Count; i++)
+        for (int i = 0; i < Array.Count; i++)
         {
-            Godot.Collections.Array Rows = (Godot.Collections.Array)LayersArray[i];
-            for (int j = 0; j < Rows.Count; j++)
+            Godot.Collections.Array Columns = (Godot.Collections.Array)Array[i];
+            for (int j = 0; j < Columns.Count; j++)
             {
-                Godot.Collections.Array Columns = (Godot.Collections.Array)Rows[j];
-                for (int k = 0; k < Columns.Count; k++)
-                {
-                    RetVal.Layers[i, j, k] = (int)Columns[k];
-                }
+                RetVal.Matrix[i, j] = (int)Columns[j];
             }
         }
 

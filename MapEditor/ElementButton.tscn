@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3 uid="uid://c4whikgps81jy"]
+
+[ext_resource type="Texture2D" uid="uid://djseaxgg2eyu0" path="res://Assets/Textures/snail.png" id="1_oepqm"]
+[ext_resource type="Script" path="res://MapEditor/ElementButton.cs" id="1_sw5jx"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ehn8n"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kxa5n"]
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+
+[node name="ElementButton" type="Control"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 64.0
+offset_bottom = 64.0
+script = ExtResource("1_sw5jx")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_ehn8n")
+theme_override_styles/hover = SubResource("StyleBoxFlat_kxa5n")
+icon = ExtResource("1_oepqm")
+icon_alignment = 1
+expand_icon = true
+
+[connection signal="gui_input" from="Button" to="." method="_OnButtonGuiInput"]

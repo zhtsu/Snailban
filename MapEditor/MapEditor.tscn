@@ -1,0 +1,41 @@
+[gd_scene load_steps=3 format=3 uid="uid://b8j724jn3o1t6"]
+
+[ext_resource type="Script" path="res://MapEditor/MapEditor.cs" id="1_qic6h"]
+[ext_resource type="PackedScene" uid="uid://bj182l3c1ik5u" path="res://MapEditor/ElementBrowser.tscn" id="2_8pigh"]
+
+[node name="MapEditor" type="CanvasLayer"]
+script = ExtResource("1_qic6h")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Grid" type="GridContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 8
+
+[node name="ElementBrowserWindow" type="Window" parent="."]
+canvas_item_default_texture_filter = 0
+title = "Element Browser"
+position = Vector2i(100, 100)
+size = Vector2i(512, 512)
+unresizable = true
+content_scale_mode = 1
+
+[node name="ElementBrowser" parent="ElementBrowserWindow" instance=ExtResource("2_8pigh")]
+
+[node name="SimulationWindow" type="Window" parent="."]
+title = "Simulation"
+position = Vector2i(200, 200)
+size = Vector2i(512, 512)
+visible = false
+unresizable = true

@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://1ygfgh7h7lbd"]
+
+[ext_resource type="PackedScene" uid="uid://cuahdrnobl742" path="res://Scenes/Element/Snail/Snail.tscn" id="1_8abq3"]
+[ext_resource type="Texture2D" uid="uid://c67qhr4xu5s3d" path="res://Assets/Textures/leaf_snail.png" id="2_uip4b"]
+
+[node name="LeafSnail" instance=ExtResource("1_8abq3")]
+
+[node name="Body" parent="." index="0"]
+texture = ExtResource("2_uip4b")

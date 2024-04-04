@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://5ll08olsmvc5"]
+
+[ext_resource type="PackedScene" uid="uid://bpudn21vmp4bi" path="res://Scenes/Element/Misc/TargetPoint/TargetPoint.tscn" id="1_eg67a"]
+[ext_resource type="Texture2D" uid="uid://cxwbxv88pp1lk" path="res://Assets/Textures/fire_snail.png" id="2_u2vka"]
+
+[node name="TP_FireSnail" instance=ExtResource("1_eg67a")]
+Kind = 3
+
+[node name="Body" parent="." index="0"]
+texture = ExtResource("2_u2vka")

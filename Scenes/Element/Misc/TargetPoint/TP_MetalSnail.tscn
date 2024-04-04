@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://cjiib3qa8ioqn"]
+
+[ext_resource type="PackedScene" uid="uid://bpudn21vmp4bi" path="res://Scenes/Element/Misc/TargetPoint/TargetPoint.tscn" id="1_s1opr"]
+[ext_resource type="Texture2D" uid="uid://bygkc4na5fwfv" path="res://Assets/Textures/metal_snail.png" id="2_ur8rg"]
+
+[node name="TP_MetalSnail" instance=ExtResource("1_s1opr")]
+Kind = 8
+
+[node name="Body" parent="." index="0"]
+texture = ExtResource("2_ur8rg")

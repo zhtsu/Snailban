@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://do661otg51chn"
-path="res://.godot/imported/grass.png-bd8693609e2236b94b5eb6d9741bc1d7.ctex"
+uid="uid://4yvgjhheh7rs"
+path="res://.godot/imported/water_snail.png-c81601d2fe4be2ed06683881c288c7f2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Textures/grass.png"
-dest_files=["res://.godot/imported/grass.png-bd8693609e2236b94b5eb6d9741bc1d7.ctex"]
+source_file="res://Assets/Textures/water_snail.png"
+dest_files=["res://.godot/imported/water_snail.png-c81601d2fe4be2ed06683881c288c7f2.ctex"]
 
 [params]
 

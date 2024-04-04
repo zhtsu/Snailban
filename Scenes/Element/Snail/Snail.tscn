@@ -5,7 +5,10 @@
 [ext_resource type="Texture2D" uid="uid://djseaxgg2eyu0" path="res://Assets/Textures/snail.png" id="3_ktlfa"]
 
 [node name="Snail" instance=ExtResource("1_qt3xn")]
+z_index = 1
 script = ExtResource("2_uhfrw")
+Kind = 1
+Type = 2
 
 [node name="Body" parent="." index="0"]
 texture = ExtResource("3_ktlfa")

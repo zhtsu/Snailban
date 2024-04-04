@@ -11,13 +11,15 @@ public partial class Level : Node2D
 	private Dictionary<int, PackedScene> PreloadedElementDict = new Dictionary<int, PackedScene>();
 	private Player MyPlayer;
     private Element[,] MapMatrix = new Element[8, 8];
-	// Uecord the initial value of the map
-	// Used to recover the Matrix's value when the player leave from a location
-	private Element[,] MapMatrixBak = new Element[8, 8];
 	private CustomSignals MySignals;
 	private Dictionary<int, Dictionary<Element, Vector2I>> ElementLocationHistory;
 	private int StepCount = 0;
 	private Label StepCountLabel;
+	// For map editor
+	// If start a level from map editor
+	// Set the SimulationMode to true
+	[Export]
+	public bool SimulationMode = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -36,65 +38,97 @@ public partial class Level : Node2D
 		PreloadElement();
 		InitMap();
 
-		MySignals = GetNode<CustomSignals>("/root/CustomSignals");
-		MySignals.UpKey += UpKeyDown;
-		MySignals.DownKey += DownKeyDown;
-		MySignals.LeftKey += LeftKeyDown;
-		MySignals.RightKey += RightKeyDown;
-		MySignals.SpaceKey += SpaceKeyDown;
+		// If level is simulating in map editor
+		// Use key event in _Input()
+		if (SimulationMode == false)
+		{
+			MySignals = GetNode<CustomSignals>("/root/CustomSignals");
+			MySignals.UpKey += UpKeyDown;
+			MySignals.DownKey += DownKeyDown;
+			MySignals.LeftKey += LeftKeyDown;
+			MySignals.RightKey += RightKeyDown;
+			MySignals.SpaceKey += SpaceKeyDown;
+		}
 	}
 
     public override void _ExitTree()
     {
         base._ExitTree();
 
-		MySignals.UpKey -= UpKeyDown;
-		MySignals.DownKey -= DownKeyDown;
-		MySignals.LeftKey -= LeftKeyDown;
-		MySignals.RightKey -= RightKeyDown;
-		MySignals.SpaceKey -= SpaceKeyDown;
+		if (SimulationMode == false)
+		{
+			MySignals.UpKey -= UpKeyDown;
+			MySignals.DownKey -= DownKeyDown;
+			MySignals.LeftKey -= LeftKeyDown;
+			MySignals.RightKey -= RightKeyDown;
+			MySignals.SpaceKey -= SpaceKeyDown;
+		}
     }
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta)
-	{
+    public override void _Input(InputEvent @event)
+    {
+        base._Input(@event);
 
-	}
+		if (SimulationMode == false)
+		{
+			return;
+		}
+
+		// For map editor
+		if (@event is InputEventKey EventKey)
+		{
+			if (Input.IsActionJustPressed("Up"))
+			{
+				UpKeyDown();
+			}
+			else if (Input.IsActionJustPressed("Down"))
+			{
+				DownKeyDown();
+			}
+			else if (Input.IsActionJustPressed("Left"))
+			{
+				LeftKeyDown();
+			}
+			else if (Input.IsActionJustPressed("Right"))
+			{
+				RightKeyDown();
+			}
+			else if (Input.IsActionJustPressed("Space"))
+			{
+				SpaceKeyDown();
+			}
+		}
+    }
 
 	private void InitMap()
 	{
 		Vector2I Location = new Vector2I(0, 0);
 
-		for (int i = 0; i < MapBean.LayerCount; i++)
+		for (int i = 0; i < 8; i++)
 		{
-			for (int j = 0; j < MapBean.Row; j++)
+			Location.X = i;
+			for (int j = 0; j < 8; j++)
 			{
-				Location.X = j;
-				for (int k = 0; k < MapBean.Column; k++)
+				Location.Y = j;
+				int ElementId = MapBean.Matrix[i, j];
+				if (ConfigData.ElementBeanDict.TryGetValue(ElementId, out ElementBean MyElementBean) == false)
 				{
-					Location.Y = k;
-					int ElementId = MapBean.Layers[i, j, k];
-					if (ConfigData.ElementBeanDict.TryGetValue(ElementId, out ElementBean MyElementBean) == false)
-					{
-						continue;
-					}
+					continue;
+				}
 
-					if (PreloadedElementDict.TryGetValue(ElementId, out PackedScene ElementScene))
+				if (PreloadedElementDict.TryGetValue(ElementId, out PackedScene ElementScene))
+				{
+					Element MyElement = (Element)ElementScene.Instantiate();
+					MapMatrix[i, j] = MyElement;
+					MyElement.Id = MyElementBean.Id;
+					MyElement.Location = Location;
+					MyElement.Name = MyElementBean.Name;
+					if (MyElementBean.Name == "Player")
 					{
-						Element MyElement = (Element)ElementScene.Instantiate();
-						MapMatrix[j, k] = MyElement;
-						MapMatrixBak[j, k] = MyElement;
-						MyElement.Id = MyElementBean.Id;
-						MyElement.Location = Location;
-						MyElement.Name = MyElementBean.Name;
-						if (MyElementBean.Name == "Player")
-						{
-							MyPlayer = (Player)MyElement;
-							MapMatrixBak[j, k] = null;
-						}
-						MyElement.Position = new Vector2(MapBean.TileWidth * j, MapBean.TileHeight * k);
-						AddChild(MyElement);
+						MyPlayer = (Player)MyElement;
 					}
+					MyElement.Position = new Vector2(j * 64, i * 64);
+					AddChild(MyElement);
 				}
 			}
 		}
@@ -102,19 +136,16 @@ public partial class Level : Node2D
 
 	private void PreloadElement()
 	{
-		for (int i = MapBean.LayerCount - 1; i >= 0; i--)
+		for (int i = 0; i < 8; i++)
 		{
-			for (int j = 0; j < MapBean.Row; j++)
+			for (int j = 0; j < 8; j++)
 			{
-				for (int k = 0; k < MapBean.Column; k++)
+				int ElementId = MapBean.Matrix[i, j];
+				if (ConfigData.ElementBeanDict.TryGetValue(ElementId, out ElementBean MyElementBean) == true &&
+					PreloadedElementDict.TryGetValue(ElementId, out PackedScene Scene) == false)
 				{
-					int ElementId = MapBean.Layers[i, j, k];
-					if (ConfigData.ElementBeanDict.TryGetValue(ElementId, out ElementBean MyElementBean) == true &&
-					    PreloadedElementDict.TryGetValue(ElementId, out PackedScene Scene) == false)
-					{
-						PackedScene MyElementScene = (PackedScene)GD.Load(ProjectSettings.GlobalizePath(MyElementBean.Path));
-						PreloadedElementDict.Add(ElementId, MyElementScene);
-					}
+					PackedScene MyElementScene = (PackedScene)GD.Load(ProjectSettings.GlobalizePath(MyElementBean.Path));
+					PreloadedElementDict.Add(ElementId, MyElementScene);
 				}
 			}
 		}
@@ -126,10 +157,10 @@ public partial class Level : Node2D
 
 		switch (MovementDirection)
 		{
-			case Direction.Up: 		NewLocation.Y -= 1; break;
-			case Direction.Down:	NewLocation.Y += 1; break;
-			case Direction.Left:	NewLocation.X -= 1; break;
-			case Direction.Right:	NewLocation.X += 1; break;
+			case Direction.Up: 		NewLocation.X -= 1; break;
+			case Direction.Down:	NewLocation.X += 1; break;
+			case Direction.Left:	NewLocation.Y -= 1; break;
+			case Direction.Right:	NewLocation.Y += 1; break;
 		}
 
 		return NewLocation;
@@ -170,7 +201,7 @@ public partial class Level : Node2D
 
 	private void MoveElementByLocation(Element MovedElement, Vector2I NewLocation)
 	{
-		Vector2 NewPosition = new Vector2(NewLocation[0] * 64, NewLocation[1] * 64);
+		Vector2 NewPosition = new Vector2(NewLocation.Y * 64, NewLocation.X * 64);
 		Vector2I OldLocation = MovedElement.Location;
 
 		// When redo, the old location may have been covered by a snail element
