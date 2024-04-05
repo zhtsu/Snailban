@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bygkc4na5fwfv" path="res://Assets/Textures/metal_snail.png" id="2_fqfsa"]
 
 [node name="MetalSnail" instance=ExtResource("1_dtfes")]
+Kind = 8
 
 [node name="Body" parent="." index="0"]
 texture = ExtResource("2_fqfsa")

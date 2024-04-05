@@ -7,7 +7,7 @@ public partial class Level : Node2D
 {
 	[Export]
 	public int MapId;
-	private FMapBean MapBean;
+	public FMapBean MapBean;
 	private Dictionary<int, PackedScene> PreloadedElementDict = new Dictionary<int, PackedScene>();
 	private Player MyPlayer;
     private Element[,] MapMatrix = new Element[8, 8];
@@ -27,12 +27,18 @@ public partial class Level : Node2D
 		ElementLocationHistory = new Dictionary<int, Dictionary<Element, Vector2I>>();
 		StepCountLabel = GetNode<Label>("CanvasLayer/StepCount");
 
-		// Initialize the map bean
-		// The variable 'MapBean' will updated when the game state was changed
-		if (ConfigData.MapBeanDict.TryGetValue(MapId, out MapBean) == false)
+		// If level is not simulating in map editor
+		// Will auto set the MapBean
+		// If SimulationMode was true, make sure the MapBean was set manual
+		if (SimulationMode == false)
 		{
-			GD.PushWarning("Invalid map id! id: " + MapId.ToString());
-			return;
+			// Initialize the map bean
+			// The variable 'MapBean' will updated when the game state was changed
+			if (ConfigData.MapBeanDict.TryGetValue(MapId, out MapBean) == false)
+			{
+				GD.PushWarning("Invalid map id! id: " + MapId.ToString());
+				return;
+			}
 		}
 
 		PreloadElement();
@@ -219,7 +225,7 @@ public partial class Level : Node2D
 		.Connect("finished", Callable.From(() => ResetElementMoving(MovedElement)));
 	}
 
-	private Element GetFacedElement(Element CheckedElement, Direction MovementDirection)
+	private Element GetFacingElement(Element CheckedElement, Direction MovementDirection)
 	{
 		Vector2I TargetLocation = GetTargetLocation(CheckedElement, MovementDirection);
 		return MapMatrix[TargetLocation.X, TargetLocation.Y];
@@ -238,7 +244,7 @@ public partial class Level : Node2D
 			return false;
 		}
 
-		Element FacingElement = GetFacedElement(MyPlayer, MovementDirection);
+		Element FacingElement = GetFacingElement(MyPlayer, MovementDirection);
 		if (FacingElement != null && FacingElement.Type == ElementType.Barrier)
 		{
 			return false;
@@ -251,11 +257,17 @@ public partial class Level : Node2D
 		return true;
 	}
 
-	public bool HandleSnail(Snail FacingSnail, Direction MovementDirection)
+	public bool HandleSnail(Snail CheckedSnail, Direction MovementDirection)
 	{
-		if (IsElementCanMove(FacingSnail, MovementDirection))
+		Element FacingElement = GetFacingElement(CheckedSnail, MovementDirection);
+		if (FacingElement != null && FacingElement.Type == ElementType.Snail)
 		{
-			MoveElement(FacingSnail, MovementDirection);
+			return false;
+		}
+
+		if (IsElementCanMove(CheckedSnail, MovementDirection))
+		{
+			MoveElement(CheckedSnail, MovementDirection);
 			return true;
 		}
 
@@ -274,7 +286,7 @@ public partial class Level : Node2D
 			return false;
 		}
 
-		Element FacedElement = GetFacedElement(MovedElement, MovementDirection);
+		Element FacedElement = GetFacingElement(MovedElement, MovementDirection);
 		if (FacedElement != null && FacedElement.Type == ElementType.Barrier)
 		{
 			return false;

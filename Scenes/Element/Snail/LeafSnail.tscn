@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://c67qhr4xu5s3d" path="res://Assets/Textures/leaf_snail.png" id="2_uip4b"]
 
 [node name="LeafSnail" instance=ExtResource("1_8abq3")]
+Kind = 7
 
 [node name="Body" parent="." index="0"]
 texture = ExtResource("2_uip4b")

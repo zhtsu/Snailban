@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://bj182l3c1ik5u"]
+[gd_scene load_steps=2 format=3 uid="uid://bj182l3c1ik5u"]
 
 [ext_resource type="Script" path="res://MapEditor/ElementBrowser.cs" id="1_nat4g"]
-[ext_resource type="Texture2D" uid="uid://djseaxgg2eyu0" path="res://Assets/Textures/snail.png" id="2_vyl2q"]
 
 [node name="ElementBrowser" type="CanvasLayer"]
 script = ExtResource("1_nat4g")
@@ -43,12 +42,12 @@ size_flags_horizontal = 3
 focus_mode = 0
 text = "Save As"
 
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="SelectedElementButton" type="Button" parent="VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 focus_mode = 0
-icon = ExtResource("2_vyl2q")
 icon_alignment = 1
+expand_icon = true
 
 [node name="SimulateButton" type="Button" parent="VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(0, 60)

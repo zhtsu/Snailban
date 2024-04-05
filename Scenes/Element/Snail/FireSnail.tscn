@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://cxwbxv88pp1lk" path="res://Assets/Textures/fire_snail.png" id="2_clxov"]
 
 [node name="FireSnail" instance=ExtResource("1_qbc87")]
+Kind = 3
 
 [node name="Body" parent="." index="0"]
 texture = ExtResource("2_clxov")
