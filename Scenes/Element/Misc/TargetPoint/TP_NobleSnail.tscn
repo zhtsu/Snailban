@@ -1,10 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://bmj1k2lcf2v80"]
+[gd_scene load_steps=4 format=3 uid="uid://bmj1k2lcf2v80"]
 
 [ext_resource type="PackedScene" uid="uid://bpudn21vmp4bi" path="res://Scenes/Element/Misc/TargetPoint/TargetPoint.tscn" id="1_6kiov"]
 [ext_resource type="Texture2D" uid="uid://cholxxlkharib" path="res://Assets/Textures/noble_snail.png" id="2_hbfmh"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_5rb6s"]
+radius = 20.0
+
 [node name="TP_NobleSnail" instance=ExtResource("1_6kiov")]
 Kind = 6
+Type = 5
 
 [node name="Body" parent="." index="0"]
 texture = ExtResource("2_hbfmh")
+
+[node name="Area2D" type="Area2D" parent="." index="1"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" index="0"]
+position = Vector2(32, 32)
+shape = SubResource("CircleShape2D_5rb6s")

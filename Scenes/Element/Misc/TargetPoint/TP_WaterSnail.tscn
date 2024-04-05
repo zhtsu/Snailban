@@ -1,10 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://ce80278pg5ubt"]
+[gd_scene load_steps=4 format=3 uid="uid://ce80278pg5ubt"]
 
 [ext_resource type="PackedScene" uid="uid://bpudn21vmp4bi" path="res://Scenes/Element/Misc/TargetPoint/TargetPoint.tscn" id="1_fp2cu"]
 [ext_resource type="Texture2D" uid="uid://4yvgjhheh7rs" path="res://Assets/Textures/water_snail.png" id="2_dsmxo"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_5rb6s"]
+radius = 20.0
+
 [node name="TP_WaterSnail" instance=ExtResource("1_fp2cu")]
 Kind = 5
+Type = 5
 
 [node name="Body" parent="." index="0"]
 texture = ExtResource("2_dsmxo")
+
+[node name="Area2D" type="Area2D" parent="." index="1"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" index="0"]
+position = Vector2(32, 32)
+shape = SubResource("CircleShape2D_5rb6s")

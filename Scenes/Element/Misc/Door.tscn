@@ -6,7 +6,7 @@
 
 [node name="Door" instance=ExtResource("1_vours")]
 script = ExtResource("2_agpnx")
-Type = 3
+Type = 4
 
 [node name="Body" parent="." index="0"]
 texture = ExtResource("2_elqc6")

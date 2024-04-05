@@ -1,10 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://dyarlvdmnckfl"]
+[gd_scene load_steps=4 format=3 uid="uid://dyarlvdmnckfl"]
 
 [ext_resource type="PackedScene" uid="uid://bpudn21vmp4bi" path="res://Scenes/Element/Misc/TargetPoint/TargetPoint.tscn" id="1_h5m3h"]
 [ext_resource type="Texture2D" uid="uid://c404lrlct8umo" path="res://Assets/Textures/dark_snail.png" id="2_dv3xy"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_5rb6s"]
+radius = 20.0
+
 [node name="TP_DarkSnail" instance=ExtResource("1_h5m3h")]
 Kind = 4
+Type = 5
 
 [node name="Body" parent="." index="0"]
 texture = ExtResource("2_dv3xy")
+
+[node name="Area2D" type="Area2D" parent="." index="1"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" index="0"]
+position = Vector2(32, 32)
+shape = SubResource("CircleShape2D_5rb6s")

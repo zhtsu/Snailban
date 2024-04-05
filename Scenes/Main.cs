@@ -49,9 +49,12 @@ public partial class Main : Node
 
 	private void LoadLevel(int MapId)
 	{
-		MainMenu MyMainMenu = GetNode<MainMenu>("MainMenu");
-		RemoveChild(MyMainMenu);
-		MyMainMenu.QueueFree();
+		foreach (Node Child in GetChildren())
+		{
+			RemoveChild(Child);
+			Child.QueueFree();
+		}
+
 		PackedScene LevelScene = (PackedScene)GD.Load("res://Scenes/Game/Level.tscn");
 		Level MyLevel = (Level)LevelScene.Instantiate();
 		MyLevel.MapId = MapId;

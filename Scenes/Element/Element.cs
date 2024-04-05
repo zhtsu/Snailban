@@ -9,4 +9,5 @@ public partial class Element : Node2D
 	public string DisplayName = "Element";
 	public Vector2I Location;
 	public bool Moving = false;
+	public bool CanMove = true;
 }

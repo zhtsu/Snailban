@@ -11,10 +11,13 @@ public partial class Level : Node2D
 	private Dictionary<int, PackedScene> PreloadedElementDict = new Dictionary<int, PackedScene>();
 	private Player MyPlayer;
     private Element[,] MapMatrix = new Element[8, 8];
+	private Element[,] MapMatrixBak = new Element[8, 8];
 	private CustomSignals MySignals;
 	private Dictionary<int, Dictionary<Element, Vector2I>> ElementLocationHistory;
 	private int StepCount = 0;
 	private Label StepCountLabel;
+	private Godot.Collections.Array<TargetPoint> TargetPoints = new Godot.Collections.Array<TargetPoint>();
+	private Door MyDoor;
 	// For map editor
 	// If start a level from map editor
 	// Set the SimulationMode to true
@@ -126,12 +129,21 @@ public partial class Level : Node2D
 				{
 					Element MyElement = (Element)ElementScene.Instantiate();
 					MapMatrix[i, j] = MyElement;
+					MapMatrixBak[i, j] = MyElement;
 					MyElement.Id = MyElementBean.Id;
 					MyElement.Location = Location;
 					MyElement.Name = MyElementBean.Name;
 					if (MyElementBean.Name == "Player")
 					{
 						MyPlayer = (Player)MyElement;
+					}
+					else if (MyElement.Name.ToString().Contains("TP_"))
+					{
+						TargetPoints.Add((TargetPoint)MyElement);
+					}
+					else if (MyElement.Name == "Door")
+					{
+						MyDoor = (Door)MyElement;
 					}
 					MyElement.Position = new Vector2(j * 64, i * 64);
 					AddChild(MyElement);
@@ -216,6 +228,13 @@ public partial class Level : Node2D
 		{
 			MapMatrix[OldLocation.X, OldLocation.Y] = null;
 		}
+
+		Element OldLocationElementBak = MapMatrixBak[OldLocation.X, OldLocation.Y];
+		if (OldLocationElementBak != null && OldLocationElementBak.Type == ElementType.TargetPoint)
+		{
+			MapMatrix[OldLocation.X, OldLocation.Y] = MapMatrixBak[OldLocation.X, OldLocation.Y];
+		}
+
 		MapMatrix[NewLocation.X, NewLocation.Y] = MovedElement;
 		MovedElement.Location = NewLocation;
 
@@ -228,12 +247,17 @@ public partial class Level : Node2D
 	private Element GetFacingElement(Element CheckedElement, Direction MovementDirection)
 	{
 		Vector2I TargetLocation = GetTargetLocation(CheckedElement, MovementDirection);
+		if (TargetLocation.X < 0 || TargetLocation.X > 7 || TargetLocation.Y < 0 || TargetLocation.Y > 7)
+		{
+			return null;
+		}
+
 		return MapMatrix[TargetLocation.X, TargetLocation.Y];
 	}
 
 	// Access and check the element in front of the player
 	// If player can move and will return true
-	private bool HandleFacedElement(Element CheckedElement, Direction MovementDirection)
+	private bool HandleFacingElement(Element CheckedElement, Direction MovementDirection)
 	{
 		Vector2I TargetLocation = GetTargetLocation(CheckedElement, MovementDirection);
 		int X = TargetLocation.X;
@@ -245,13 +269,22 @@ public partial class Level : Node2D
 		}
 
 		Element FacingElement = GetFacingElement(MyPlayer, MovementDirection);
-		if (FacingElement != null && FacingElement.Type == ElementType.Barrier)
+		if (FacingElement == null)
+		{
+			return true;
+		}
+
+		if (FacingElement.Type == ElementType.Barrier)
 		{
 			return false;
 		} 
-		else if (FacingElement != null && FacingElement.Type == ElementType.Snail)
+		else if (FacingElement.Type == ElementType.Snail)
 		{
 			return HandleSnail((Snail)FacingElement, MovementDirection);
+		}
+		else if (FacingElement.Type == ElementType.Door)
+		{
+			return HandleDoor((Door)FacingElement);
 		}
 		
 		return true;
@@ -264,6 +297,27 @@ public partial class Level : Node2D
 		{
 			return false;
 		}
+		else if (FacingElement != null && FacingElement.Type == ElementType.Door)
+		{
+			return false;
+		}
+		else if (FacingElement != null && FacingElement.Type == ElementType.TargetPoint)
+		{
+			TargetPoint MyTargetPoint = (TargetPoint)FacingElement;
+			if (CheckedSnail.Kind != MyTargetPoint.Kind)
+			{
+				return false;
+			}
+			else
+			{
+				MoveElement(CheckedSnail, MovementDirection);
+				CheckedSnail.CanMove = false;
+				MyTargetPoint.Completed = true;
+				CheckAllTargetPoint();
+				return true;
+			}
+		}
+		
 
 		if (IsElementCanMove(CheckedSnail, MovementDirection))
 		{
@@ -274,9 +328,39 @@ public partial class Level : Node2D
 		return false;
 	}
 
+	private void CheckAllTargetPoint()
+	{
+		bool AllCompleted = true;
+		foreach (TargetPoint TP in TargetPoints)
+		{
+			AllCompleted = AllCompleted && TP.Completed;
+		}
+
+		if (AllCompleted)
+		{
+			MyDoor.OpenTheDoor();
+		}
+	}
+
+	public bool HandleDoor(Door CheckedDoor)
+	{
+		if (CheckedDoor.Accept == true)
+		{
+			MySignals.EmitSignal("LevelStarted", 1);
+			return false;
+		}
+
+		return false;
+	}
+
 	// If the element can move, return the location after moving
 	private bool IsElementCanMove(Element MovedElement, Direction MovementDirection)
 	{
+		if (MovedElement.CanMove == false)
+		{
+			return false;
+		}
+
 		Vector2I TargetLocation = GetTargetLocation(MovedElement, MovementDirection);
 		int X = TargetLocation.X;
 		int Y = TargetLocation.Y;
@@ -297,7 +381,7 @@ public partial class Level : Node2D
 
 	private void UpKeyDown()
 	{
-		if (MyPlayer.Moving || HandleFacedElement(MyPlayer, Direction.Up) == false)
+		if (MyPlayer.Moving || HandleFacingElement(MyPlayer, Direction.Up) == false)
 		{
 			return;
 		}
@@ -310,7 +394,7 @@ public partial class Level : Node2D
 
 	private void DownKeyDown()
 	{
-		if (MyPlayer.Moving || HandleFacedElement(MyPlayer, Direction.Down) == false)
+		if (MyPlayer.Moving || HandleFacingElement(MyPlayer, Direction.Down) == false)
 		{
 			return;
 		}
@@ -323,7 +407,7 @@ public partial class Level : Node2D
 
 	private void LeftKeyDown()
 	{
-		if (MyPlayer.Moving || HandleFacedElement(MyPlayer, Direction.Left) == false)
+		if (MyPlayer.Moving || HandleFacingElement(MyPlayer, Direction.Left) == false)
 		{
 			return;
 		}
@@ -336,7 +420,7 @@ public partial class Level : Node2D
 
 	private void RightKeyDown()
 	{
-		if (MyPlayer.Moving || HandleFacedElement(MyPlayer, Direction.Right) == false)
+		if (MyPlayer.Moving || HandleFacingElement(MyPlayer, Direction.Right) == false)
 		{
 			return;
 		}

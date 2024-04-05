@@ -16,8 +16,8 @@ public enum ElementType
     Player,
     Snail,
     Barrier,
-    Trap,
-    Effect
+    Door,
+    TargetPoint
 }
 
 public enum SnailKind

@@ -1,10 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://d156wl0jhgoe3"]
+[gd_scene load_steps=4 format=3 uid="uid://d156wl0jhgoe3"]
 
 [ext_resource type="PackedScene" uid="uid://bpudn21vmp4bi" path="res://Scenes/Element/Misc/TargetPoint/TargetPoint.tscn" id="1_7akra"]
 [ext_resource type="Texture2D" uid="uid://c67qhr4xu5s3d" path="res://Assets/Textures/leaf_snail.png" id="2_rc1og"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_5rb6s"]
+radius = 20.0
+
 [node name="TP_LeafSnail" instance=ExtResource("1_7akra")]
 Kind = 7
+Type = 5
 
 [node name="Body" parent="." index="0"]
 texture = ExtResource("2_rc1og")
+
+[node name="Area2D" type="Area2D" parent="." index="1"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" index="0"]
+position = Vector2(32, 32)
+shape = SubResource("CircleShape2D_5rb6s")

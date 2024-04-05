@@ -1,10 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://dl5j5d87wcuuy"]
+[gd_scene load_steps=4 format=3 uid="uid://dl5j5d87wcuuy"]
 
 [ext_resource type="PackedScene" uid="uid://bpudn21vmp4bi" path="res://Scenes/Element/Misc/TargetPoint/TargetPoint.tscn" id="1_vdrxd"]
 [ext_resource type="Texture2D" uid="uid://din0nxmelkt21" path="res://Assets/Textures/rainbow_snail.png" id="2_1i55m"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_5rb6s"]
+radius = 20.0
+
 [node name="TP_RainbowSnail" instance=ExtResource("1_vdrxd")]
 Kind = 2
+Type = 5
 
 [node name="Body" parent="." index="0"]
 texture = ExtResource("2_1i55m")
+
+[node name="Area2D" type="Area2D" parent="." index="1"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" index="0"]
+position = Vector2(32, 32)
+shape = SubResource("CircleShape2D_5rb6s")
