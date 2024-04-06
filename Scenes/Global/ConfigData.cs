@@ -18,7 +18,7 @@ public partial class ConfigData : Node
 
     public void LoadMapData()
     {
-        string FilePath = MyPaths.GenMapDataPath("maps.table");
+        string FilePath = MyPaths.GenMapDataPath("map_table.txt");
         Dictionary<string, List<string>> Dict = MyMethods.LoadCsv(FilePath);
 
         List<string> Numbers = Dict["ID"];
@@ -38,7 +38,7 @@ public partial class ConfigData : Node
 
     public void LoadElementData()
     {
-        string FilePath = MyPaths.GenDataPath("elements.table");
+        string FilePath = MyPaths.GenDataPath("element_table.txt");
         Dictionary<string, List<string>> Dict = MyMethods.LoadCsv(FilePath);
         
         List<string> Ids = Dict["ID"];
@@ -81,7 +81,7 @@ public partial class ConfigData : Node
 
     public void LoadSnailTexturePaths()
     {
-        List<string> SnailTextureFiles = MyMethods.LoadTxtToList(MyPaths.GenDataPath("snail_textures.list"));
+        List<string> SnailTextureFiles = MyMethods.LoadTxtToList(MyPaths.GenDataPath("snail_textures.txt"));
         foreach (string SnailTextureFile in SnailTextureFiles)
         {
             SnailTexturePaths.Add(MyPaths.GenTexturePath(SnailTextureFile));

@@ -1,30 +1,19 @@
 using Godot;
-using Microsoft.VisualBasic.FileIO;
 using System.Collections.Generic;
-using System.IO;
 
 public partial class MyMethods : Node
 {
     public static Godot.Collections.Dictionary LoadJson(string FilePath)
     {
-        if (!File.Exists(FilePath))
+        FileAccess JsonFile = FileAccess.Open(FilePath, FileAccess.ModeFlags.Read);
+        if (JsonFile == null)
         {
-            GD.PrintErr("Failed to load map data! FilePath: " + FilePath);
+            GD.PrintErr("Failed to load map data file: " + FilePath);
             return null;
         }
 
-        string FileData = null;
-        try
-        {
-            FileData = File.ReadAllText(FilePath);
-        }
-        catch(System.Exception Err)
-        {
-            GD.PrintErr(Err);
-        }
-
         Json JsonLoader = new Json();
-        Error Error = JsonLoader.Parse(FileData);
+        Error Error = JsonLoader.Parse(JsonFile.GetAsText());
         if (Error != Error.Ok)
         {
             GD.PrintErr(Error);
@@ -38,29 +27,37 @@ public partial class MyMethods : Node
     {
         Dictionary<string, List<string>> RetVal = new Dictionary<string, List<string>>();
 
-        using (TextFieldParser Parser = new TextFieldParser(FilePath))
+        FileAccess CsvFile = FileAccess.Open(FilePath, FileAccess.ModeFlags.Read);
+        if (CsvFile == null)
         {
-            Parser.TextFieldType = FieldType.Delimited;
-            Parser.SetDelimiters(",");
+            GD.PushError("Failed to open csv file: ", FilePath);
+            return null;
+        }
 
-            Dictionary<int, string> IndexToHeader = new Dictionary<int, string>();
-            string[] Headers = Parser.ReadFields();
-            for(int i = 0; i < Headers.Length; i++)
+        string[] Headers = CsvFile.GetCsvLine();
+        Dictionary<int, string> IndexToHeader = new Dictionary<int, string>();
+        for(int i = 0; i < Headers.Length; i++)
+        {
+            IndexToHeader.Add(i, Headers[i]);
+            RetVal.Add(Headers[i], new List<string>());
+        }
+
+        while(!CsvFile.EofReached())
+        {
+            string[] Fields = CsvFile.GetCsvLine();
+            if (Fields.Length != 0 && Fields[0] == "")
             {
-                IndexToHeader.Add(i, Headers[i]);
-                RetVal.Add(Headers[i], new List<string>());
+                continue;
             }
 
-            while(!Parser.EndOfData)
+            for(int i = 0; i < Fields.Length; i++)
             {
-                string[] Fields = Parser.ReadFields();
-                for(int i = 0; i < Fields.Length; i++)
-                {
-                    string Key = IndexToHeader.GetValueOrDefault(i);
-                    RetVal.GetValueOrDefault(Key).Add(Fields[i]);
-                }
+                string Key = IndexToHeader.GetValueOrDefault(i);
+                RetVal.GetValueOrDefault(Key).Add(Fields[i]);
             }
         }
+
+        CsvFile.Close();
 
         return RetVal;
     }
@@ -70,13 +67,16 @@ public partial class MyMethods : Node
     {
         List<string> RetVal = new List<string>();
 
-        using(StreamReader Reader = new StreamReader(FilePath))
+        FileAccess TxtFile = FileAccess.Open(FilePath, FileAccess.ModeFlags.Read);
+        if (TxtFile == null)
         {
-            string Line;
-            while((Line = Reader.ReadLine()) != null)
-            {
-                RetVal.Add(Line);
-            }
+            GD.PushError("Failed to open txt file: ", FilePath);
+            return null;
+        }
+
+        while(TxtFile.EofReached() == false)
+        {
+            RetVal.Add(TxtFile.GetLine());
         }
 
         return RetVal;

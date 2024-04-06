@@ -8,7 +8,6 @@ radius = 20.0
 
 [node name="TP_NormalSnail" instance=ExtResource("1_bjb2y")]
 Kind = 1
-Type = 5
 
 [node name="Body" parent="." index="0"]
 texture = ExtResource("2_7ulfp")
