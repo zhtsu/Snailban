@@ -133,15 +133,21 @@ public partial class Level : Node2D
 					MyElement.Id = MyElementBean.Id;
 					MyElement.Location = Location;
 					MyElement.Name = MyElementBean.Name;
-					if (MyElementBean.Name == "Player")
+					if (MyElement.Type == ElementType.Player)
 					{
 						MyPlayer = (Player)MyElement;
 					}
-					else if (MyElement.Name.ToString().Contains("TP_"))
+					else if (MyElement.Type == ElementType.TargetPoint)
 					{
-						TargetPoints.Add((TargetPoint)MyElement);
+						TargetPoint MyTargetPoint = MyElement as TargetPoint;
+						TargetPoints.Add(MyTargetPoint);
+						if (MyTargetPoint != null)
+						{
+							MyTargetPoint.SnailEntered += CheckAllTargetPoint;
+							MyTargetPoint.SnailExited += CheckAllTargetPoint;
+						}
 					}
-					else if (MyElement.Name == "Door")
+					else if (MyElement.Type == ElementType.Door)
 					{
 						MyDoor = (Door)MyElement;
 					}
@@ -311,9 +317,6 @@ public partial class Level : Node2D
 			else
 			{
 				MoveElement(CheckedSnail, MovementDirection);
-				CheckedSnail.CanMove = false;
-				MyTargetPoint.Completed = true;
-				CheckAllTargetPoint();
 				return true;
 			}
 		}
@@ -340,6 +343,12 @@ public partial class Level : Node2D
 		{
 			MyDoor.OpenTheDoor();
 		}
+		else
+		{
+			MyDoor.CloseTheDoor();
+		}
+
+		GD.Print("nani");
 	}
 
 	public bool HandleDoor(Door CheckedDoor)

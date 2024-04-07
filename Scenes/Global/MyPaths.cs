@@ -6,21 +6,21 @@ public partial class MyPaths : Node
 {
     public static string GenMapDataPath(string File)
     {
-        return ProjectSettings.GlobalizePath("res://Assets/Data/Maps/") + File;
+        return "res://Assets/Data/Maps/" + File;
     }
 
     public static string GenDataPath(string File)
     {
-        return ProjectSettings.GlobalizePath("res://Assets/Data/") + File;
+        return "res://Assets/Data/" + File;
     }
 
     public static string GenElementPath(string File)
     {
-        return ProjectSettings.GlobalizePath("res://Scenes/Element/") + File;
+        return "res://Scenes/Element/" + File;
     }
 
     public static string GenTexturePath(string File)
     {
-        return ProjectSettings.GlobalizePath("res://Assets/Textures/") + File;
+        return "res://Assets/Textures/" + File;
     }
 }
