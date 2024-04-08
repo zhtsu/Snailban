@@ -1,10 +1,26 @@
-[gd_scene load_steps=3 format=3 uid="uid://0l1v2axpj2xa"]
+[gd_scene load_steps=4 format=3 uid="uid://0l1v2axpj2xa"]
 
 [ext_resource type="PackedScene" uid="uid://cuahdrnobl742" path="res://Scenes/Element/Snail/Snail.tscn" id="1_qbc87"]
+[ext_resource type="Script" path="res://Scenes/Element/Snail/FireSnail.cs" id="2_087p5"]
 [ext_resource type="Texture2D" uid="uid://cxwbxv88pp1lk" path="res://Assets/Textures/fire_snail.png" id="2_clxov"]
 
 [node name="FireSnail" instance=ExtResource("1_qbc87")]
-Kind = 3
+script = ExtResource("2_087p5")
 
 [node name="Body" parent="." index="0"]
 texture = ExtResource("2_clxov")
+
+[node name="CountdownLabel" type="Label" parent="." index="2"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 25.0
+offset_top = 15.0
+offset_right = 39.0
+offset_bottom = 49.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "3"

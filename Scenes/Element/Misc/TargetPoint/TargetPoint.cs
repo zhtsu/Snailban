@@ -31,7 +31,6 @@ public partial class TargetPoint : Element
 			if (EnteredSnail != null)
 			{
 				EnteredSnail.CanMove = false;
-				GD.Print("Enter");
 			}
 			EmitSignal("SnailEntered");
 		}
@@ -46,7 +45,6 @@ public partial class TargetPoint : Element
 			if (EnteredSnail != null)
 			{
 				EnteredSnail.CanMove = true;
-				GD.Print("Exit");
 			}
 			EmitSignal("SnailExited");
 		}
