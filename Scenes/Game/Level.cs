@@ -325,6 +325,7 @@ public partial class Level : Node2D
 		if (IsElementCanMove(CheckedSnail, MovementDirection))
 		{
 			MoveElement(CheckedSnail, MovementDirection);
+			CheckedSnail.HandleMove(this, MovementDirection);
 			return true;
 		}
 
@@ -347,8 +348,6 @@ public partial class Level : Node2D
 		{
 			MyDoor.CloseTheDoor();
 		}
-
-		GD.Print("nani");
 	}
 
 	public bool HandleDoor(Door CheckedDoor)
@@ -461,6 +460,14 @@ public partial class Level : Node2D
 		{
 			AllMovedElement.TryGetValue(Key, out Vector2I OldLocation);
 			MoveElementByLocation(Key, OldLocation);
+			if (Key is Snail)
+			{
+				Snail RedoSnail = Key as Snail;
+				if (RedoSnail != null)
+				{
+					RedoSnail.HandleRedo(this, OldLocation);
+				}
+			}
 		}
 
 		ElementLocationHistory.Remove(StepCount);
