@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://ch8h6hk1escm"]
+
+[ext_resource type="Script" path="res://Scenes/Game/Explosion.cs" id="1_ev8hh"]
+[ext_resource type="SpriteFrames" uid="uid://c6bpgma20aksh" path="res://Resources/sf_explosion.tres" id="1_so1na"]
+
+[node name="Explosion" type="Node2D"]
+script = ExtResource("1_ev8hh")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(32, 32)
+sprite_frames = ExtResource("1_so1na")
+animation = &"Start"
+frame = 11
+frame_progress = 1.0

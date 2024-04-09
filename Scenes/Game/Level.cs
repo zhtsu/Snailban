@@ -46,6 +46,7 @@ public partial class Level : Node2D
 
 		PreloadElement();
 		InitMap();
+		CheckAllTargetPoint();
 
 		// If level is simulating in map editor
 		// Use key event in _Input()
@@ -389,6 +390,11 @@ public partial class Level : Node2D
 
 	private void UpKeyDown()
 	{
+		if (MyPlayer.CanMove == false)
+		{
+			return;
+		}
+
 		if (MyPlayer.Moving || HandleFacingElement(MyPlayer, Direction.Up) == false)
 		{
 			return;
@@ -402,6 +408,11 @@ public partial class Level : Node2D
 
 	private void DownKeyDown()
 	{
+		if (MyPlayer.CanMove == false)
+		{
+			return;
+		}
+
 		if (MyPlayer.Moving || HandleFacingElement(MyPlayer, Direction.Down) == false)
 		{
 			return;
@@ -415,6 +426,11 @@ public partial class Level : Node2D
 
 	private void LeftKeyDown()
 	{
+		if (MyPlayer.CanMove == false)
+		{
+			return;
+		}
+
 		if (MyPlayer.Moving || HandleFacingElement(MyPlayer, Direction.Left) == false)
 		{
 			return;
@@ -428,6 +444,11 @@ public partial class Level : Node2D
 
 	private void RightKeyDown()
 	{
+		if (MyPlayer.CanMove == false)
+		{
+			return;
+		}
+
 		if (MyPlayer.Moving || HandleFacingElement(MyPlayer, Direction.Right) == false)
 		{
 			return;
@@ -515,13 +536,35 @@ public partial class Level : Node2D
 	private Queue<Element> RemovalElementQueue = new Queue<Element>();
 	private void RemoveElementCallable(string AnimName)
 	{
+		List<Vector2> ExplosionPositions = new List<Vector2>();
 		foreach (Element RemovedElement in RemovalElementQueue)
 		{
+			ExplosionPositions.Add(RemovedElement.Position);
 			RemoveChild(RemovedElement);
 			MapMatrix[RemovedElement.Location.X, RemovedElement.Location.Y] = null;
 		}
 		RemovalElementQueue.Clear();
+		
+		Explosion FirstExplosion = null;
+		for (int i = 0; i < ExplosionPositions.Count; i++)
+		{
+			Vector2 Position = ExplosionPositions[i];
+			PackedScene ExplosionScene = (PackedScene)GD.Load("res://Scenes/Game/Explosion.tscn");
+			Explosion MyExplosion = (Explosion)ExplosionScene.Instantiate();
+			MyExplosion.Position = Position;
+			AddChild(MyExplosion);
 
-		MyPlayer.CanMove = true;
+			if (i == 0)
+			{
+				FirstExplosion = MyExplosion;
+			}
+		}
+
+		if (FirstExplosion != null)
+		{
+			FirstExplosion.ExplosionFinished += () => {
+				MyPlayer.CanMove = true;
+			};
+		}
 	}
 }
