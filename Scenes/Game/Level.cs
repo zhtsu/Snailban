@@ -475,6 +475,7 @@ public partial class Level : Node2D
 			foreach (Element RemovedElement in OneStep.RemovedElements)
 			{
 				AddChild(RemovedElement);
+				MapMatrix[RemovedElement.Location.X, RemovedElement.Location.Y] = RemovedElement;
 			}
 		}
 
@@ -487,15 +488,16 @@ public partial class Level : Node2D
 	{
 		RemovedElement.CanMove = false;
 		MyPlayer.CanMove = false;
-		RemovedElement.GetNode<AnimationPlayer>("AnimationPlayer").Play("Flicker");
-		RemovedElement.GetNode<AnimationPlayer>("AnimationPlayer").Connect(
-			"animation_finished",
-			Callable.From((string AnimName) => {
-				RemoveChild(RemovedElement);
-				MapMatrix[RemovedElement.Location.X, RemovedElement.Location.Y] = null;
-				MyPlayer.CanMove = true;
-			})
-		);
+		AnimationPlayer ElementAnimPlayer = RemovedElement.GetNode<AnimationPlayer>("AnimationPlayer");
+		ElementAnimPlayer.Play("Flicker");
+
+		RemovalElementQueue.Enqueue(RemovedElement);
+
+		if (ElementAnimPlayer.IsConnected("animation_finished", new Callable(this, nameof(RemoveElementCallable))))
+		{
+			ElementAnimPlayer.Disconnect("animation_finished", new Callable(this, nameof(RemoveElementCallable)));
+		}
+		ElementAnimPlayer.Connect("animation_finished", new Callable(this, nameof(RemoveElementCallable)));
 
 		int SavedStepCount = StepCount + 1;
 		if (ElementLocationHistory.TryGetValue(SavedStepCount, out FOneStep OneStep))
@@ -508,5 +510,18 @@ public partial class Level : Node2D
 			NewOneStep.RemovedElements.Add(RemovedElement);
 			ElementLocationHistory.Add(SavedStepCount, NewOneStep);
 		}
+	}
+
+	private Queue<Element> RemovalElementQueue = new Queue<Element>();
+	private void RemoveElementCallable(string AnimName)
+	{
+		foreach (Element RemovedElement in RemovalElementQueue)
+		{
+			RemoveChild(RemovedElement);
+			MapMatrix[RemovedElement.Location.X, RemovedElement.Location.Y] = null;
+		}
+		RemovalElementQueue.Clear();
+
+		MyPlayer.CanMove = true;
 	}
 }
