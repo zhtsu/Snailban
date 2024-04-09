@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 
 public struct FMapBean
@@ -7,14 +8,14 @@ public struct FMapBean
     public int [,] Matrix;
 }
 
-public struct ElementBean
+public struct FElementBean
 {
     public int Id;
 	public string Name;
     public string Path;
     public Texture2D Icon;
 
-    public ElementBean()
+    public FElementBean()
     {
         this.Id = -1;
         this.Name = "Element";
@@ -22,12 +23,32 @@ public struct ElementBean
         this.Icon = null;
     }
 
-    public ElementBean(int Id, string Name, string Path)
+    public FElementBean(int Id, string Name, string Path)
     {
         this.Id = Id;
         this.Name = Name;
         this.Path = Path;
         this.Icon = null;
+    }
+}
+
+public struct FRemovedElement
+{
+    public int Id;
+    public Vector2I Location;
+}
+
+public struct FOneStep
+{
+    public Dictionary<Element, Vector2I> MovedElements;
+    public bool AnyElementRemoved;
+    public List<Element> RemovedElements;
+
+    public FOneStep()
+    {
+        MovedElements = new Dictionary<Element, Vector2I>();
+        AnyElementRemoved = false;
+        RemovedElements = new List<Element>();
     }
 }
 

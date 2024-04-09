@@ -10,7 +10,7 @@ public partial class ElementButton : Control
     public delegate void RightMouseButtonClickedEventHandler();
 
     private Button MyButton;
-    public ElementBean MyElementBean = new ElementBean();
+    public FElementBean MyElementBean = new FElementBean();
     public Texture2D Icon = (Texture2D)GD.Load("res://Assets/Textures/snail.png");
 
     public override void _Ready()
@@ -23,7 +23,7 @@ public partial class ElementButton : Control
         }
     }
 
-    public void DrawElement(ElementBean InElementBean)
+    public void DrawElement(FElementBean InElementBean)
     {
         MyElementBean = InElementBean;
         MyButton.Icon = InElementBean.Icon;
@@ -36,7 +36,7 @@ public partial class ElementButton : Control
     public void ErasureElement()
     {
         MyButton.Icon = null;
-        MyElementBean = new ElementBean();
+        MyElementBean = new FElementBean();
     }
 
     public void _OnButtonGuiInput(InputEvent @event)

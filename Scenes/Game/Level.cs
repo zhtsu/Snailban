@@ -10,10 +10,10 @@ public partial class Level : Node2D
 	public FMapBean MapBean;
 	private Dictionary<int, PackedScene> PreloadedElementDict = new Dictionary<int, PackedScene>();
 	private Player MyPlayer;
-    private Element[,] MapMatrix = new Element[8, 8];
+    public Element[,] MapMatrix = new Element[8, 8];
 	private Element[,] MapMatrixBak = new Element[8, 8];
 	private CustomSignals MySignals;
-	private Dictionary<int, Dictionary<Element, Vector2I>> ElementLocationHistory;
+	private Dictionary<int, FOneStep> ElementLocationHistory;
 	private int StepCount = 0;
 	private Label StepCountLabel;
 	private Godot.Collections.Array<TargetPoint> TargetPoints = new Godot.Collections.Array<TargetPoint>();
@@ -27,7 +27,7 @@ public partial class Level : Node2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		ElementLocationHistory = new Dictionary<int, Dictionary<Element, Vector2I>>();
+		ElementLocationHistory = new Dictionary<int, FOneStep>();
 		StepCountLabel = GetNode<Label>("CanvasLayer/StepCount");
 
 		// If level is not simulating in map editor
@@ -120,7 +120,7 @@ public partial class Level : Node2D
 			{
 				Location.Y = j;
 				int ElementId = MapBean.Matrix[i, j];
-				if (ConfigData.ElementBeanDict.TryGetValue(ElementId, out ElementBean MyElementBean) == false)
+				if (ConfigData.ElementBeanDict.TryGetValue(ElementId, out FElementBean MyElementBean) == false)
 				{
 					continue;
 				}
@@ -165,7 +165,7 @@ public partial class Level : Node2D
 			for (int j = 0; j < 8; j++)
 			{
 				int ElementId = MapBean.Matrix[i, j];
-				if (ConfigData.ElementBeanDict.TryGetValue(ElementId, out ElementBean MyElementBean) == true &&
+				if (ConfigData.ElementBeanDict.TryGetValue(ElementId, out FElementBean MyElementBean) == true &&
 					PreloadedElementDict.TryGetValue(ElementId, out PackedScene Scene) == false)
 				{
 					PackedScene MyElementScene = (PackedScene)GD.Load(ProjectSettings.GlobalizePath(MyElementBean.Path));
@@ -209,15 +209,15 @@ public partial class Level : Node2D
 			SavedStepCount += 1;
 		}
 
-		if (ElementLocationHistory.TryGetValue(SavedStepCount, out Dictionary<Element, Vector2I> AllMovedElement))
+		if (ElementLocationHistory.TryGetValue(SavedStepCount, out FOneStep OneStep))
 		{
-			AllMovedElement.Add(MovedElement, OldLocation);
+			OneStep.MovedElements.Add(MovedElement, OldLocation);
 		}
 		else
 		{
-			Dictionary<Element, Vector2I> Dict = new Dictionary<Element, Vector2I>();
-			Dict.Add(MovedElement, OldLocation);
-			ElementLocationHistory.Add(SavedStepCount, Dict);
+			FOneStep NewOneStep = new FOneStep();
+			NewOneStep.MovedElements.Add(MovedElement, OldLocation);
+			ElementLocationHistory.Add(SavedStepCount, NewOneStep);
 		}
 
 		MoveElementByLocation(MovedElement, NewLocation);
@@ -250,7 +250,7 @@ public partial class Level : Node2D
 		.Connect("finished", Callable.From(() => ResetElementMoving(MovedElement)));
 	}
 
-	private Element GetFacingElement(Element CheckedElement, Direction MovementDirection)
+	public Element GetFacingElement(Element CheckedElement, Direction MovementDirection)
 	{
 		Vector2I TargetLocation = GetTargetLocation(CheckedElement, MovementDirection);
 		if (TargetLocation.X < 0 || TargetLocation.X > 7 || TargetLocation.Y < 0 || TargetLocation.Y > 7)
@@ -451,14 +451,14 @@ public partial class Level : Node2D
 			return;
 		}
 
-		if (ElementLocationHistory.TryGetValue(StepCount, out Dictionary<Element, Vector2I> AllMovedElement) == false)
+		if (ElementLocationHistory.TryGetValue(StepCount, out FOneStep OneStep) == false)
 		{
 			return;
 		}
 
-		foreach (Element Key in AllMovedElement.Keys)
+		foreach (Element Key in OneStep.MovedElements.Keys)
 		{
-			AllMovedElement.TryGetValue(Key, out Vector2I OldLocation);
+			OneStep.MovedElements.TryGetValue(Key, out Vector2I OldLocation);
 			MoveElementByLocation(Key, OldLocation);
 			if (Key is Snail)
 			{
@@ -470,8 +470,43 @@ public partial class Level : Node2D
 			}
 		}
 
+		if (OneStep.RemovedElements.Count > 0)
+		{
+			foreach (Element RemovedElement in OneStep.RemovedElements)
+			{
+				AddChild(RemovedElement);
+			}
+		}
+
 		ElementLocationHistory.Remove(StepCount);
 		StepCount -= 1;
 		StepCountLabel.Text = StepCount.ToString();
+	}
+
+	public void RemoveElement(Element RemovedElement)
+	{
+		RemovedElement.CanMove = false;
+		MyPlayer.CanMove = false;
+		RemovedElement.GetNode<AnimationPlayer>("AnimationPlayer").Play("Flicker");
+		RemovedElement.GetNode<AnimationPlayer>("AnimationPlayer").Connect(
+			"animation_finished",
+			Callable.From((string AnimName) => {
+				RemoveChild(RemovedElement);
+				MapMatrix[RemovedElement.Location.X, RemovedElement.Location.Y] = null;
+				MyPlayer.CanMove = true;
+			})
+		);
+
+		int SavedStepCount = StepCount + 1;
+		if (ElementLocationHistory.TryGetValue(SavedStepCount, out FOneStep OneStep))
+		{
+			OneStep.RemovedElements.Add(RemovedElement);
+		}
+		else
+		{
+			FOneStep NewOneStep = new FOneStep();
+			NewOneStep.RemovedElements.Add(RemovedElement);
+			ElementLocationHistory.Add(SavedStepCount, NewOneStep);
+		}
 	}
 }

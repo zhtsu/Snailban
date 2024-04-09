@@ -13,7 +13,7 @@ public partial class ElementBrowser : CanvasLayer
 	private Button SimulateButton;
 	private GridContainer Grid;
 	private Button SelectedElementButton;
-	public ElementBean SelectedElementBean = new ElementBean();
+	public FElementBean SelectedElementBean = new FElementBean();
 
 
 	// Called when the node enters the scene tree for the first time.
@@ -30,7 +30,7 @@ public partial class ElementBrowser : CanvasLayer
 		PackedScene ElementButtonScene = (PackedScene)GD.Load("res://MapEditor/ElementButton.tscn");
 		foreach (int Key in ConfigData.ElementBeanDict.Keys)
 		{
-			ConfigData.ElementBeanDict.TryGetValue(Key, out ElementBean MyElementBean);
+			ConfigData.ElementBeanDict.TryGetValue(Key, out FElementBean MyElementBean);
 			ElementButton MyElementButton = (ElementButton)ElementButtonScene.Instantiate();
 			PackedScene ElementScene = (PackedScene)GD.Load(MyElementBean.Path);
 			Element MyElement = (Element)ElementScene.Instantiate();
@@ -42,7 +42,7 @@ public partial class ElementBrowser : CanvasLayer
 		}
 	}
 
-	private void SetSelectedElement(ElementBean InElementBean)
+	private void SetSelectedElement(FElementBean InElementBean)
 	{
 		SelectedElementBean = InElementBean;
 		SelectedElementButton.Icon = InElementBean.Icon;

@@ -5,7 +5,7 @@ using Godot;
 public partial class ConfigData : Node
 {
     // All .tscn file path of Elements
-    public static Dictionary<int, ElementBean> ElementBeanDict = new Dictionary<int, ElementBean>();
+    public static Dictionary<int, FElementBean> ElementBeanDict = new Dictionary<int, FElementBean>();
     public static Dictionary<int, FMapBean> MapBeanDict = new Dictionary<int, FMapBean>();
     public static Godot.Collections.Array<string> SnailTexturePaths = new Godot.Collections.Array<string>();
 
@@ -53,7 +53,7 @@ public partial class ConfigData : Node
         for (int i = 0; i < Ids.Count; i++)
         {
             int Id = Int32.Parse(Ids[i]);
-            ElementBean MyElementBean = new ElementBean(Id, Names[i], Paths[i]);
+            FElementBean MyElementBean = new FElementBean(Id, Names[i], Paths[i]);
             ElementBeanDict.Add(Id, MyElementBean);
         }
     }

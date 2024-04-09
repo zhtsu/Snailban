@@ -10,6 +10,9 @@ script = ExtResource("2_087p5")
 [node name="Body" parent="." index="0"]
 texture = ExtResource("2_clxov")
 
+[node name="Area2D" parent="." index="1"]
+visible = true
+
 [node name="CountdownLabel" type="Label" parent="." index="2"]
 anchors_preset = 8
 anchor_left = 0.5
