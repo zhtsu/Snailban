@@ -4,7 +4,7 @@ using System.Numerics;
 
 public partial class Player : Element
 {
-	private AnimationPlayer AnimPlayer;
+	private AnimationPlayer BlinkAnimPlayer;
 	private Timer BlinkTimer;
 	private bool FirstBlink = true;
 
@@ -15,7 +15,7 @@ public partial class Player : Element
 
 		Type = ElementType.Player;
 
-		AnimPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+		BlinkAnimPlayer = GetNode<AnimationPlayer>("BlinkAnimPlayer");
 		BlinkTimer = GetNode<Timer>("Timer");
 
 		BlinkTimer.Connect("timeout", new Callable(this, nameof(StartBlinkTimer)));
@@ -33,6 +33,6 @@ public partial class Player : Element
 			return;
 		}
 
-		AnimPlayer.Play("Blink");
+		BlinkAnimPlayer.Play("Blink");
 	}
 }

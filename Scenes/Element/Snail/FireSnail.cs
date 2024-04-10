@@ -13,7 +13,7 @@ public partial class FireSnail : Snail
 		AnimPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
     }
 
-    public override void HandleMove(Level InLevel, Direction MovementDirection)
+    public override bool HandleMove(Level InLevel, Direction MovementDirection)
 	{
 		Countdown -= 1;
 		CountdownLabel.Text = Countdown.ToString();
@@ -27,6 +27,8 @@ public partial class FireSnail : Snail
 			}
 			InLevel.RemoveElement(this);
 		}
+
+		return true;
 	}
 
 	public override void HandleRedo(Level InLevel, Vector2I OldLocation)
@@ -38,5 +40,23 @@ public partial class FireSnail : Snail
 
 		Countdown += 1;
 		CountdownLabel.Text = Countdown.ToString();
+	}
+
+	// For LeafSnail
+	public void PlusOne()
+	{
+		Countdown += 1;
+		CountdownLabel.Text = Countdown.ToString();
+	}
+
+	// For WaterSnail
+	public void MinusOne(Level InLevel)
+	{
+		Countdown -= 1;
+		CountdownLabel.Text = Countdown.ToString();
+		if (Countdown == 0)
+		{
+			InLevel.RemoveElement(this);
+		}
 	}
 }

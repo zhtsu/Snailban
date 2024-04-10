@@ -34,7 +34,7 @@ Type = 1
 [node name="Body" parent="." index="0"]
 texture = ExtResource("3_lbb4w")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="1"]
+[node name="BlinkAnimPlayer" type="AnimationPlayer" parent="." index="1"]
 libraries = {
 "": SubResource("AnimationLibrary_iwfxc")
 }

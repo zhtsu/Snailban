@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://1ygfgh7h7lbd"]
+[gd_scene load_steps=4 format=3 uid="uid://1ygfgh7h7lbd"]
 
 [ext_resource type="PackedScene" uid="uid://cuahdrnobl742" path="res://Scenes/Element/Snail/Snail.tscn" id="1_8abq3"]
 [ext_resource type="Texture2D" uid="uid://c67qhr4xu5s3d" path="res://Assets/Textures/leaf_snail.png" id="2_uip4b"]
+[ext_resource type="Script" path="res://Scenes/Element/Snail/LeafSnail.cs" id="2_wd73l"]
 
 [node name="LeafSnail" instance=ExtResource("1_8abq3")]
+script = ExtResource("2_wd73l")
 Kind = 7
 
 [node name="Body" parent="." index="0"]

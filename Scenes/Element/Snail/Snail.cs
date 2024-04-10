@@ -6,13 +6,13 @@ public partial class Snail : Element
 	[Export]
 	public SnailKind Kind = SnailKind.None;
 
-	public virtual void HandleMove(Level InLevel, Direction MovementDirection)
+	public virtual bool HandleMove(Level InLevel, Direction MovementDirection)
 	{
-
+		return false;
 	}
 
 	public virtual void HandleRedo(Level InLevel, Vector2I OldLocation)
 	{
-
+		
 	}
 }

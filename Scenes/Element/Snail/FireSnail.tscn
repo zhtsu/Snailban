@@ -6,6 +6,7 @@
 
 [node name="FireSnail" instance=ExtResource("1_qbc87")]
 script = ExtResource("2_087p5")
+Kind = 3
 
 [node name="Body" parent="." index="0"]
 texture = ExtResource("2_clxov")

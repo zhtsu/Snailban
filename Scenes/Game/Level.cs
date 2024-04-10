@@ -9,12 +9,12 @@ public partial class Level : Node2D
 	public int MapId;
 	public FMapBean MapBean;
 	private Dictionary<int, PackedScene> PreloadedElementDict = new Dictionary<int, PackedScene>();
-	private Player MyPlayer;
+	public Player MyPlayer;
     public Element[,] MapMatrix = new Element[8, 8];
 	private Element[,] MapMatrixBak = new Element[8, 8];
 	private CustomSignals MySignals;
-	private Dictionary<int, FOneStep> ElementLocationHistory;
-	private int StepCount = 0;
+	public Dictionary<int, FOneStep> ElementLocationHistory;
+	public int StepCount = 0;
 	private Label StepCountLabel;
 	private Godot.Collections.Array<TargetPoint> TargetPoints = new Godot.Collections.Array<TargetPoint>();
 	private Door MyDoor;
@@ -193,7 +193,7 @@ public partial class Level : Node2D
 
 	// This function will move the element without any check
 	// Make sure the required check was completed when call this function
-	private void MoveElement(Element MovedElement, Direction MovementDirection)
+	public void MoveElement(Element MovedElement, Direction MovementDirection)
 	{
 		MovedElement.Moving = true;
 
@@ -302,6 +302,12 @@ public partial class Level : Node2D
 		Element FacingElement = GetFacingElement(CheckedSnail, MovementDirection);
 		if (FacingElement != null && FacingElement.Type == ElementType.Snail)
 		{
+			Snail FacingSnail = (Snail)FacingElement;
+			if (FacingSnail.Kind == SnailKind.Fire && (CheckedSnail.Kind == SnailKind.Leaf || CheckedSnail.Kind == SnailKind.Water))
+			{
+				return CheckedSnail.HandleMove(this, MovementDirection);
+			}
+
 			return false;
 		}
 		else if (FacingElement != null && FacingElement.Type == ElementType.Door)
@@ -321,13 +327,11 @@ public partial class Level : Node2D
 				return true;
 			}
 		}
-		
 
 		if (IsElementCanMove(CheckedSnail, MovementDirection))
 		{
 			MoveElement(CheckedSnail, MovementDirection);
-			CheckedSnail.HandleMove(this, MovementDirection);
-			return true;
+			return CheckedSnail.HandleMove(this, MovementDirection);
 		}
 
 		return false;
@@ -335,6 +339,11 @@ public partial class Level : Node2D
 
 	private void CheckAllTargetPoint()
 	{
+		if (MyDoor == null)
+		{
+			return;
+		}
+
 		bool AllCompleted = true;
 		foreach (TargetPoint TP in TargetPoints)
 		{
@@ -521,6 +530,7 @@ public partial class Level : Node2D
 		ElementAnimPlayer.Connect("animation_finished", new Callable(this, nameof(RemoveElementCallable)));
 
 		int SavedStepCount = StepCount + 1;
+
 		if (ElementLocationHistory.TryGetValue(SavedStepCount, out FOneStep OneStep))
 		{
 			OneStep.RemovedElements.Add(RemovedElement);
