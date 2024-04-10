@@ -9,7 +9,7 @@ public partial class Level : Node2D
 	public int MapId;
 	public FMapBean MapBean;
 	private Dictionary<int, PackedScene> PreloadedElementDict = new Dictionary<int, PackedScene>();
-	public Player MyPlayer;
+	public List<Player> MyPlayers = new List<Player>();
     public Element[,] MapMatrix = new Element[8, 8];
 	private Element[,] MapMatrixBak = new Element[8, 8];
 	private CustomSignals MySignals;
@@ -136,7 +136,7 @@ public partial class Level : Node2D
 					MyElement.Name = MyElementBean.Name;
 					if (MyElement.Type == ElementType.Player)
 					{
-						MyPlayer = (Player)MyElement;
+						MyPlayers.Add((Player)MyElement);
 					}
 					else if (MyElement.Type == ElementType.TargetPoint)
 					{
@@ -157,6 +157,7 @@ public partial class Level : Node2D
 				}
 			}
 		}
+		GD.Print(MyPlayers[0], MyPlayers[1]);
 	}
 
 	private void PreloadElement()
@@ -200,18 +201,10 @@ public partial class Level : Node2D
 		Vector2I OldLocation = (Vector2I)MovedElement.Location;
 		Vector2I NewLocation = GetTargetLocation(MovedElement, MovementDirection);
 
-		int SavedStepCount = StepCount;
-		if (MovedElement.Type == ElementType.Snail)
-		{
-			// Because the snail's movable check precedes player's
-			// And when the snail can move, mean the player can also move
-			// When the player moved(After current operation), we need to let StepCount + 1
-			// So let the StepCount + 1 now to make sure the StepCount is the same for both
-			SavedStepCount += 1;
-		}
-
+		int SavedStepCount = StepCount + 1;
 		if (ElementLocationHistory.TryGetValue(SavedStepCount, out FOneStep OneStep))
 		{
+			GD.Print(SavedStepCount, MovedElement, OldLocation);
 			OneStep.MovedElements.Add(MovedElement, OldLocation);
 		}
 		else
@@ -275,7 +268,7 @@ public partial class Level : Node2D
 			return false;
 		}
 
-		Element FacingElement = GetFacingElement(MyPlayer, MovementDirection);
+		Element FacingElement = GetFacingElement(CheckedElement, MovementDirection);
 		if (FacingElement == null)
 		{
 			return true;
@@ -284,7 +277,11 @@ public partial class Level : Node2D
 		if (FacingElement.Type == ElementType.Barrier)
 		{
 			return false;
-		} 
+		}
+		if (FacingElement.Type == ElementType.Player)
+		{
+			return false;
+		}
 		else if (FacingElement.Type == ElementType.Snail)
 		{
 			return HandleSnail((Snail)FacingElement, MovementDirection);
@@ -312,6 +309,10 @@ public partial class Level : Node2D
 			return false;
 		}
 		else if (FacingElement != null && FacingElement.Type == ElementType.Door)
+		{
+			return false;
+		}
+		else if (FacingElement != null && FacingElement.Type == ElementType.Player)
 		{
 			return false;
 		}
@@ -407,74 +408,49 @@ public partial class Level : Node2D
 
 	private void UpKeyDown()
 	{
-		if (MyPlayer.CanMove == false)
-		{
-			return;
-		}
-
-		if (MyPlayer.Moving || HandleFacingElement(MyPlayer, Direction.Up) == false)
-		{
-			return;
-		}
-
-		StepCount += 1;
-		StepCountLabel.Text = StepCount.ToString();
-
-		MoveElement(MyPlayer, Direction.Up);
+		MoveAllPlayer(Direction.Up);
 	}
 
 	private void DownKeyDown()
 	{
-		if (MyPlayer.CanMove == false)
-		{
-			return;
-		}
-
-		if (MyPlayer.Moving || HandleFacingElement(MyPlayer, Direction.Down) == false)
-		{
-			return;
-		}
-
-		StepCount += 1;
-		StepCountLabel.Text = StepCount.ToString();
-
-		MoveElement(MyPlayer, Direction.Down);
+		MoveAllPlayer(Direction.Down);
 	}
 
 	private void LeftKeyDown()
 	{
-		if (MyPlayer.CanMove == false)
-		{
-			return;
-		}
-
-		if (MyPlayer.Moving || HandleFacingElement(MyPlayer, Direction.Left) == false)
-		{
-			return;
-		}
-
-		StepCount += 1;
-		StepCountLabel.Text = StepCount.ToString();
-
-		MoveElement(MyPlayer, Direction.Left);
+		MoveAllPlayer(Direction.Left);
 	}
 
 	private void RightKeyDown()
 	{
-		if (MyPlayer.CanMove == false)
+		MoveAllPlayer(Direction.Right);
+	}
+
+	private void MoveAllPlayer(Direction MovementDirection)
+	{
+		bool PlayerMoved = false;
+		for (int i = 0; i < MyPlayers.Count; i++)
 		{
-			return;
+			Player MyPlayer = MyPlayers[i];
+			if (MyPlayer.CanMove == false)
+			{
+				continue;
+			}
+
+			if (MyPlayer.Moving || HandleFacingElement(MyPlayer, MovementDirection) == false)
+			{
+				continue;
+			}
+
+			PlayerMoved = true;
+			MoveElement(MyPlayer, MovementDirection);
 		}
 
-		if (MyPlayer.Moving || HandleFacingElement(MyPlayer, Direction.Right) == false)
+		if (PlayerMoved)
 		{
-			return;
+			StepCount += 1;
+			StepCountLabel.Text = StepCount.ToString();
 		}
-
-		StepCount += 1;
-		StepCountLabel.Text = StepCount.ToString();
-
-		MoveElement(MyPlayer, Direction.Right);
 	}
 
 	private void ResetElementMoving(Element MovedElement)
@@ -525,7 +501,10 @@ public partial class Level : Node2D
 	public void RemoveElement(Element RemovedElement)
 	{
 		RemovedElement.CanMove = false;
-		MyPlayer.CanMove = false;
+		foreach (Player MyPlayer in MyPlayers)
+		{
+			MyPlayer.CanMove = false;
+		}
 		AnimationPlayer ElementAnimPlayer = RemovedElement.GetNode<AnimationPlayer>("AnimationPlayer");
 		ElementAnimPlayer.Play("Flicker");
 
@@ -581,7 +560,10 @@ public partial class Level : Node2D
 		if (FirstExplosion != null)
 		{
 			FirstExplosion.ExplosionFinished += () => {
-				MyPlayer.CanMove = true;
+				foreach (Player MyPlayer in MyPlayers)
+				{
+					MyPlayer.CanMove = true;
+				}
 			};
 		}
 	}
