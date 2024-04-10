@@ -305,7 +305,8 @@ public partial class Level : Node2D
 			Snail FacingSnail = (Snail)FacingElement;
 			if (FacingSnail.Kind == SnailKind.Fire && (CheckedSnail.Kind == SnailKind.Leaf || CheckedSnail.Kind == SnailKind.Water))
 			{
-				return CheckedSnail.HandleMove(this, MovementDirection);
+				CheckedSnail.HandleMove(this, MovementDirection);
+				return true;
 			}
 
 			return false;
@@ -317,6 +318,12 @@ public partial class Level : Node2D
 		else if (FacingElement != null && FacingElement.Type == ElementType.TargetPoint)
 		{
 			TargetPoint MyTargetPoint = (TargetPoint)FacingElement;
+			if (CheckedSnail.Kind == SnailKind.Rainbow)
+			{
+				MoveElement(CheckedSnail, MovementDirection);
+				return true;
+			}
+			
 			if (CheckedSnail.Kind != MyTargetPoint.Kind)
 			{
 				return false;
@@ -331,7 +338,8 @@ public partial class Level : Node2D
 		if (IsElementCanMove(CheckedSnail, MovementDirection))
 		{
 			MoveElement(CheckedSnail, MovementDirection);
-			return CheckedSnail.HandleMove(this, MovementDirection);
+			CheckedSnail.HandleMove(this, MovementDirection);
+			return true;
 		}
 
 		return false;

@@ -10,7 +10,7 @@ public partial class WaterSnail : Snail
 	{
 	}
 
-	public override bool HandleMove(Level InLevel, Direction MovementDirection)
+	public override void HandleMove(Level InLevel, Direction MovementDirection)
 	{
 		Element FacingElement = InLevel.GetFacingElement(this, MovementDirection);
 		if (FacingElement != null && FacingElement.Type == ElementType.Snail)
@@ -46,8 +46,6 @@ public partial class WaterSnail : Snail
 				}
 			}
 		}
-
-		return true;
 	}
 
 	public override void HandleRedo(Level InLevel, Vector2I OldLocation)
