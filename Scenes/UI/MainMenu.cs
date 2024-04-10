@@ -77,7 +77,7 @@ public partial class MainMenu : CanvasLayer
 		}
 		else if (CursorIndex == 2)
 		{
-			ExitGame();
+			OpenLevelView();
 		}
 	}
 
@@ -91,8 +91,8 @@ public partial class MainMenu : CanvasLayer
 
 	}
 
-	private void ExitGame()
+	private void OpenLevelView()
 	{
-		GetTree().Quit();
+		
 	}
 }

@@ -157,7 +157,6 @@ public partial class Level : Node2D
 				}
 			}
 		}
-		GD.Print(MyPlayers[0], MyPlayers[1]);
 	}
 
 	private void PreloadElement()
@@ -177,16 +176,16 @@ public partial class Level : Node2D
 		}
 	}
 
-	private Vector2I GetTargetLocation(Element MovedElement, Direction MovementDirection)
+	private Vector2I GetTargetLocation(Element MovedElement, Direction MovementDirection, int Step = 1)
 	{
 		Vector2I NewLocation = (Vector2I)MovedElement.Location;
 
 		switch (MovementDirection)
 		{
-			case Direction.Up: 		NewLocation.X -= 1; break;
-			case Direction.Down:	NewLocation.X += 1; break;
-			case Direction.Left:	NewLocation.Y -= 1; break;
-			case Direction.Right:	NewLocation.Y += 1; break;
+			case Direction.Up: 		NewLocation.X -= Step; break;
+			case Direction.Down:	NewLocation.X += Step; break;
+			case Direction.Left:	NewLocation.Y -= Step; break;
+			case Direction.Right:	NewLocation.Y += Step; break;
 		}
 
 		return NewLocation;
@@ -194,17 +193,16 @@ public partial class Level : Node2D
 
 	// This function will move the element without any check
 	// Make sure the required check was completed when call this function
-	public void MoveElement(Element MovedElement, Direction MovementDirection)
+	public void MoveElement(Element MovedElement, Direction MovementDirection, int Step = 1)
 	{
 		MovedElement.Moving = true;
 
 		Vector2I OldLocation = (Vector2I)MovedElement.Location;
-		Vector2I NewLocation = GetTargetLocation(MovedElement, MovementDirection);
+		Vector2I NewLocation = GetTargetLocation(MovedElement, MovementDirection, Step);
 
 		int SavedStepCount = StepCount + 1;
 		if (ElementLocationHistory.TryGetValue(SavedStepCount, out FOneStep OneStep))
 		{
-			GD.Print(SavedStepCount, MovedElement, OldLocation);
 			OneStep.MovedElements.Add(MovedElement, OldLocation);
 		}
 		else
@@ -302,7 +300,7 @@ public partial class Level : Node2D
 			Snail FacingSnail = (Snail)FacingElement;
 			if (FacingSnail.Kind == SnailKind.Fire && (CheckedSnail.Kind == SnailKind.Leaf || CheckedSnail.Kind == SnailKind.Water))
 			{
-				CheckedSnail.HandleMove(this, MovementDirection);
+				CheckedSnail.OnMove(this, MovementDirection);
 				return true;
 			}
 
@@ -310,6 +308,20 @@ public partial class Level : Node2D
 		}
 		else if (FacingElement != null && FacingElement.Type == ElementType.Door)
 		{
+			return false;
+		}
+		else if (FacingElement != null && FacingElement.Type == ElementType.Barrier)
+		{
+			if (CheckedSnail.Kind == SnailKind.Noble)
+			{
+				NobleSnail MyNobleSnail = (NobleSnail)CheckedSnail;
+				if (MyNobleSnail.GetTeleportStep(this, MovementDirection, out int Step))
+				{
+					MoveElement(MyNobleSnail, MovementDirection, Step);
+					return true;
+				}
+			}
+
 			return false;
 		}
 		else if (FacingElement != null && FacingElement.Type == ElementType.Player)
@@ -339,7 +351,7 @@ public partial class Level : Node2D
 		if (IsElementCanMove(CheckedSnail, MovementDirection))
 		{
 			MoveElement(CheckedSnail, MovementDirection);
-			CheckedSnail.HandleMove(this, MovementDirection);
+			CheckedSnail.OnMove(this, MovementDirection);
 			return true;
 		}
 
@@ -479,7 +491,7 @@ public partial class Level : Node2D
 				Snail RedoSnail = Key as Snail;
 				if (RedoSnail != null)
 				{
-					RedoSnail.HandleRedo(this, OldLocation);
+					RedoSnail.OnRedo(this, OldLocation);
 				}
 			}
 		}

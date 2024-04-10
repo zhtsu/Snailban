@@ -10,7 +10,7 @@ public partial class LeafSnail : Snail
 	{
 	}
 
-	public override void HandleMove(Level InLevel, Direction MovementDirection)
+	public override void OnMove(Level InLevel, Direction MovementDirection)
 	{
 		Element FacingElement = InLevel.GetFacingElement(this, MovementDirection);
 		if (FacingElement != null && FacingElement.Type == ElementType.Snail)
@@ -48,7 +48,7 @@ public partial class LeafSnail : Snail
 		}
 	}
 
-	public override void HandleRedo(Level InLevel, Vector2I OldLocation)
+	public override void OnRedo(Level InLevel, Vector2I OldLocation)
 	{
 		if (TargetFireSnail != null)
 		{
