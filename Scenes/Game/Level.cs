@@ -59,6 +59,12 @@ public partial class Level : Node2D
 			MySignals.RightKey += RightKeyDown;
 			MySignals.SpaceKey += SpaceKeyDown;
 		}
+
+		FileAccess UserDataFile = FileAccess.Open(ConfigData.user_data_path, FileAccess.ModeFlags.Write);
+		Godot.Collections.Dictionary UserData = new Godot.Collections.Dictionary();
+		UserData["last_level"] = MapId;
+		UserDataFile.StoreString(UserData.ToString());
+		UserDataFile.Close();
 	}
 
     public override void _ExitTree()

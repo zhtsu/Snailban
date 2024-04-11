@@ -4,7 +4,7 @@ using Godot;
 
 public partial class ConfigData : Node
 {
-    const string save_data_path = "user://user_data.json";
+    public static string user_data_path = "user://user_data.json";
     // All .tscn file path of Elements
     public static Dictionary<int, FElementBean> ElementBeanDict = new Dictionary<int, FElementBean>();
     public static Dictionary<int, FMapBean> MapBeanDict = new Dictionary<int, FMapBean>();
