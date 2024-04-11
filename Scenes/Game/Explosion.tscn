@@ -7,7 +7,6 @@
 script = ExtResource("1_ev8hh")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(32, 32)
 sprite_frames = ExtResource("1_so1na")
 animation = &"Start"
 frame = 11

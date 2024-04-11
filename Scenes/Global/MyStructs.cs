@@ -41,13 +41,11 @@ public struct FRemovedElement
 public struct FOneStep
 {
     public Dictionary<Element, Vector2I> MovedElements;
-    public bool AnyElementRemoved;
     public List<Element> RemovedElements;
 
     public FOneStep()
     {
         MovedElements = new Dictionary<Element, Vector2I>();
-        AnyElementRemoved = false;
         RemovedElements = new List<Element>();
     }
 }

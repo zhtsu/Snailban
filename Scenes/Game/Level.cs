@@ -1,5 +1,4 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 
 
@@ -23,6 +22,7 @@ public partial class Level : Node2D
 	// Set the SimulationMode to true
 	[Export]
 	public bool SimulationMode = false;
+	public bool CanRedo = true;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -315,6 +315,11 @@ public partial class Level : Node2D
 				CheckedSnail.OnMove(this, MovementDirection);
 				return true;
 			}
+			else if (FacingSnail.Kind == SnailKind.Dark)
+			{
+				CheckedSnail.OnMove(this, MovementDirection);
+				return true;
+			}
 			else if (CheckedSnail.Kind == SnailKind.Noble)
 			{
 				NobleSnail MyNobleSnail = (NobleSnail)CheckedSnail;
@@ -507,7 +512,7 @@ public partial class Level : Node2D
 
 	private void SpaceKeyDown()
 	{
-		if (ElementLocationHistory.Count == 0)
+		if (CanRedo == false || ElementLocationHistory.Count == 0)
 		{
 			return;
 		}
@@ -634,6 +639,7 @@ public partial class Level : Node2D
 				foreach (Player MyPlayer in MyPlayers)
 				{
 					MyPlayer.CanMove = true;
+					CanRedo = true;
 				}
 			};
 		}
