@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://b0m8y52xl1015"]
+[gd_scene load_steps=4 format=3 uid="uid://b0m8y52xl1015"]
 
 [ext_resource type="PackedScene" uid="uid://cuahdrnobl742" path="res://Scenes/Element/Snail/Snail.tscn" id="1_dtfes"]
 [ext_resource type="Texture2D" uid="uid://bygkc4na5fwfv" path="res://Assets/Textures/metal_snail.png" id="2_fqfsa"]
+[ext_resource type="Script" path="res://Scenes/Element/Snail/MetalSnail.cs" id="2_pwkpj"]
 
 [node name="MetalSnail" instance=ExtResource("1_dtfes")]
+script = ExtResource("2_pwkpj")
 Kind = 8
 
 [node name="Body" parent="." index="0"]

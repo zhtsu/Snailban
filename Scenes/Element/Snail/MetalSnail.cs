@@ -1,9 +1,9 @@
 using Godot;
 using System;
 
-public partial class NobleSnail : Snail
+public partial class MetalSnail : Snail
 {
-	public bool TryGetTeleportStep(Level InLevel, Direction MovementDirection, out int Step)
+	public bool TryGetTargetStep(Level InLevel, Direction MovementDirection, out int Step)
 	{
 		Vector2I Vec = new Vector2I();
 		switch (MovementDirection)
@@ -15,20 +15,25 @@ public partial class NobleSnail : Snail
 		}
 
 		Vector2I TargetLocation = this.Location + Vec;
-		bool Found = false;
-		Step = 1;
-		while (TargetLocation.X > 0 && TargetLocation.X < 8 && TargetLocation.Y > 0 && TargetLocation.Y < 8)
+		Step = 0;
+		while (TargetLocation.X >= 0 && TargetLocation.X < 8 && TargetLocation.Y >= 0 && TargetLocation.Y < 8)
 		{
 			if (InLevel.MapMatrix[TargetLocation.X, TargetLocation.Y] == null)
 			{
-				Found = true;
+				Step += 1;
+				TargetLocation += Vec;
+			}
+			else
+			{
 				break;
 			}
-
-			Step += 1;
-			TargetLocation += Vec;
 		}
 
-		return Found;
+		if (Step == 0)
+		{
+			return false;
+		}
+
+		return true;
 	}
 }

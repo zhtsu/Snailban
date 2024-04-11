@@ -315,6 +315,15 @@ public partial class Level : Node2D
 				CheckedSnail.OnMove(this, MovementDirection);
 				return true;
 			}
+			else if (CheckedSnail.Kind == SnailKind.Noble)
+			{
+				NobleSnail MyNobleSnail = (NobleSnail)CheckedSnail;
+				if (MyNobleSnail.TryGetTeleportStep(this, MovementDirection, out int Step))
+				{
+					MoveElement(MyNobleSnail, MovementDirection, Step, true);
+					return true;
+				}
+			}
 
 			return false;
 		}
@@ -327,7 +336,7 @@ public partial class Level : Node2D
 			if (CheckedSnail.Kind == SnailKind.Noble)
 			{
 				NobleSnail MyNobleSnail = (NobleSnail)CheckedSnail;
-				if (MyNobleSnail.GetTeleportStep(this, MovementDirection, out int Step))
+				if (MyNobleSnail.TryGetTeleportStep(this, MovementDirection, out int Step))
 				{
 					MoveElement(MyNobleSnail, MovementDirection, Step, true);
 					return true;
@@ -357,6 +366,20 @@ public partial class Level : Node2D
 			{
 				MoveElement(CheckedSnail, MovementDirection);
 				return true;
+			}
+		}
+
+		if (CheckedSnail.Kind == SnailKind.Metal)
+		{
+			MetalSnail MyMetalSnail = (MetalSnail)CheckedSnail;
+			if (MyMetalSnail.TryGetTargetStep(this, MovementDirection, out int Step))
+			{
+				MoveElement(MyMetalSnail, MovementDirection, Step);
+				return true;
+			}
+			else
+			{
+				return false;
 			}
 		}
 
