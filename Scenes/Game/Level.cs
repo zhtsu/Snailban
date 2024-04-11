@@ -152,7 +152,7 @@ public partial class Level : Node2D
 					{
 						MyDoor = (Door)MyElement;
 					}
-					MyElement.Position = new Vector2(j * 64, i * 64);
+					MyElement.Position = new Vector2(j * 64 + 32, i * 64 + 32);
 					AddChild(MyElement);
 				}
 			}
@@ -193,7 +193,7 @@ public partial class Level : Node2D
 
 	// This function will move the element without any check
 	// Make sure the required check was completed when call this function
-	public void MoveElement(Element MovedElement, Direction MovementDirection, int Step = 1)
+	public void MoveElement(Element MovedElement, Direction MovementDirection, int Step = 1, bool UseZoomAnim = false)
 	{
 		MovedElement.Moving = true;
 
@@ -212,12 +212,12 @@ public partial class Level : Node2D
 			ElementLocationHistory.Add(SavedStepCount, NewOneStep);
 		}
 
-		MoveElementByLocation(MovedElement, NewLocation);
+		MoveElementByLocation(MovedElement, NewLocation, UseZoomAnim);
 	}
 
-	private void MoveElementByLocation(Element MovedElement, Vector2I NewLocation)
+	private void MoveElementByLocation(Element MovedElement, Vector2I NewLocation, bool UseZoomAnim = false)
 	{
-		Vector2 NewPosition = new Vector2(NewLocation.Y * 64, NewLocation.X * 64);
+		Vector2 NewPosition = new Vector2(NewLocation.Y * 64 + 32, NewLocation.X * 64 + 32);
 		Vector2I OldLocation = MovedElement.Location;
 
 		// When redo, the old location may have been covered by a snail element
@@ -236,10 +236,22 @@ public partial class Level : Node2D
 		MapMatrix[NewLocation.X, NewLocation.Y] = MovedElement;
 		MovedElement.Location = NewLocation;
 
-		CreateTween()
-		.TweenProperty(MovedElement, "position", NewPosition, 0.2f)
-		.SetEase(Tween.EaseType.Out)
-		.Connect("finished", Callable.From(() => ResetElementMoving(MovedElement)));
+		if (UseZoomAnim)
+		{
+			PackedScene NobleSnailGhostScene = (PackedScene)GD.Load("res://Scenes/Game/NobleSnailGhost.tscn");
+			Node2D MyNobleSnailGhost = (Node2D)NobleSnailGhostScene.Instantiate();
+			MyNobleSnailGhost.Position = new Vector2(OldLocation.Y * 64 + 32, OldLocation.X * 64 + 32);
+			AddChild(MyNobleSnailGhost);
+			MovedElement.Position = NewPosition;
+			MovedElement.GetNode<AnimationPlayer>("AnimationPlayer").Play("ZoomIn");
+		}
+		else
+		{
+			CreateTween()
+			.TweenProperty(MovedElement, "position", NewPosition, 0.2f)
+			.SetEase(Tween.EaseType.Out)
+			.Connect("finished", Callable.From(() => ResetElementMoving(MovedElement)));
+		}
 	}
 
 	public Element GetFacingElement(Element CheckedElement, Direction MovementDirection)
@@ -317,7 +329,7 @@ public partial class Level : Node2D
 				NobleSnail MyNobleSnail = (NobleSnail)CheckedSnail;
 				if (MyNobleSnail.GetTeleportStep(this, MovementDirection, out int Step))
 				{
-					MoveElement(MyNobleSnail, MovementDirection, Step);
+					MoveElement(MyNobleSnail, MovementDirection, Step, true);
 					return true;
 				}
 			}
@@ -485,7 +497,16 @@ public partial class Level : Node2D
 		foreach (Element Key in OneStep.MovedElements.Keys)
 		{
 			OneStep.MovedElements.TryGetValue(Key, out Vector2I OldLocation);
-			MoveElementByLocation(Key, OldLocation);
+
+			if (Key is NobleSnail && IsStepGreaterOne(Key.Location, OldLocation))
+			{
+				MoveElementByLocation(Key, OldLocation, true);
+			}
+			else
+			{
+				MoveElementByLocation(Key, OldLocation);
+			}
+			
 			if (Key is Snail)
 			{
 				Snail RedoSnail = Key as Snail;
@@ -508,6 +529,21 @@ public partial class Level : Node2D
 		ElementLocationHistory.Remove(StepCount);
 		StepCount -= 1;
 		StepCountLabel.Text = StepCount.ToString();
+	}
+
+	private bool IsStepGreaterOne(Vector2I OldLocation, Vector2I NewLocation)
+	{
+		int X1 = OldLocation.X;
+		int Y1 = OldLocation.Y;
+		int X2 = NewLocation.X;
+		int Y2 = NewLocation.Y;
+
+		if (Mathf.Abs(X1 - X2) > 1 || Mathf.Abs(Y1 - Y2) > 1)
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	public void RemoveElement(Element RemovedElement)
