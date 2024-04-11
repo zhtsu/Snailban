@@ -38,8 +38,9 @@ public partial class MapEditor : CanvasLayer
 	{
 		Godot.FileAccess File = Godot.FileAccess.Open(Path, Godot.FileAccess.ModeFlags.Write);
 		Godot.Collections.Dictionary MapJson = new Godot.Collections.Dictionary();
-		MapJson["Id"] = "0";
+		MapJson["id"] = "0";
 		MapJson["name"] = "Simulation";
+		MapJson["next_level"] = "1";
 		MapJson["matrix"] = MapMatrix;
 		File.StoreString(MapJson.ToString());
 		File.Close();

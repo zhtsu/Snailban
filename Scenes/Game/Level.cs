@@ -425,7 +425,7 @@ public partial class Level : Node2D
 	{
 		if (CheckedDoor.Accept == true)
 		{
-			MySignals.EmitSignal("LevelStarted", 1);
+			MySignals.EmitSignal("LevelStarted", MapBean.NextLevel);
 			return false;
 		}
 

@@ -7,6 +7,7 @@ public partial class MainMenu : CanvasLayer
 	private CustomSignals MySignals;
 	private int CursorIndex = 0;
 	private float[] CursorYArray = { 216, 286, 354 };
+	private int last_level = 1;
 	private TextureRect Cursor;
 
 	// Called when the node enters the scene tree for the first time.
@@ -61,6 +62,9 @@ public partial class MainMenu : CanvasLayer
 		CursorIndex += 1;
 		
 		CreateTween()
+
+
+
 		.TweenProperty(Cursor, "position", new Vector2(64, CursorYArray[CursorIndex]), 0.3f)
 		.SetEase(Tween.EaseType.Out);
 	}

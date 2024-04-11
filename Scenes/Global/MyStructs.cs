@@ -5,6 +5,7 @@ public struct FMapBean
 {
     public int Id;
     public string Name;
+    public int NextLevel;
     public int [,] Matrix;
 }
 

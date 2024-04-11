@@ -4,6 +4,7 @@ using Godot;
 
 public partial class ConfigData : Node
 {
+    const string save_data_path = "user://user_data.json";
     // All .tscn file path of Elements
     public static Dictionary<int, FElementBean> ElementBeanDict = new Dictionary<int, FElementBean>();
     public static Dictionary<int, FMapBean> MapBeanDict = new Dictionary<int, FMapBean>();
@@ -63,7 +64,9 @@ public partial class ConfigData : Node
         Godot.Collections.Dictionary MapDataDict = MyMethods.LoadJson(FilePath);
         
         FMapBean RetVal = new FMapBean();
+        RetVal.Id = (int)MapDataDict["id"];
         RetVal.Name = (string)MapDataDict["name"];
+        RetVal.NextLevel = (int)MapDataDict["next_level"];
         Godot.Collections.Array Array = (Godot.Collections.Array)MapDataDict["matrix"];
         RetVal.Matrix = new int[8, 8];
 

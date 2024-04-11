@@ -1,6 +1,7 @@
 {
-    "Id": "0",
+    "id": "1",
     "name": "Simulation",
+    "next_level": "2",
     "matrix": [
         [
             -1,
