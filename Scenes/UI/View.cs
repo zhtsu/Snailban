@@ -15,7 +15,7 @@ public partial class View : CanvasLayer
 		MySignals = GetNode<CustomSignals>("/root/CustomSignals");
 
 		MySignals.SpaceKey += SpaceKeyDown;
-		GD.Print(LastLevel);
+		
 		Texture2D LevelLockerTexture = (Texture2D)GD.Load("res://Assets/Textures/level_locker.png");
 		for (int i = 0; i < 16; i++)
 		{

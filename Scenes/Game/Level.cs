@@ -323,6 +323,7 @@ public partial class Level : Node2D
 			Snail FacingSnail = (Snail)FacingElement;
 			if (CheckedSnail.Kind == SnailKind.Dark)
 			{
+				FacingSnail.RemovedBy = SnailKind.Fire;
 				CheckedSnail.OnMove(this, MovementDirection);
 				return true;
 			}
@@ -336,12 +337,14 @@ public partial class Level : Node2D
 				if (CheckedSnail.Kind == SnailKind.Leaf)
 				{
 					LeafSnail MyLeafSnail = (LeafSnail)CheckedSnail;
+					MyLeafSnail.RemovedBy = SnailKind.Fire;
 					MyLeafSnail.EnterFireSnail(this, (FireSnail)FacingElement);
 					return true;
 				}
 				else if (CheckedSnail.Kind == SnailKind.Water)
 				{
 					WaterSnail MyWaterSnail = (WaterSnail)CheckedSnail;
+					MyWaterSnail.RemovedBy = SnailKind.Fire;
 					MyWaterSnail.EnterFireSnail(this, (FireSnail)FacingElement);
 					return true;
 				}
@@ -353,6 +356,11 @@ public partial class Level : Node2D
 		}
 		else if (FacingElement != null && FacingElement.Type == ElementType.Door)
 		{
+			if (CheckedSnail.Kind == SnailKind.Noble)
+			{
+				return HandleNobleSnail((NobleSnail)CheckedSnail, MovementDirection);
+			}
+
 			return false;
 		}
 		else if (FacingElement != null && FacingElement.Type == ElementType.Barrier)
@@ -416,7 +424,15 @@ public partial class Level : Node2D
 	{
 		if (InNobleSnail.TryGetTeleportStep(this, MovementDirection, out int Step))
 		{
-			MoveElement(InNobleSnail, MovementDirection, Step, true);
+			if (Step == 1)
+			{
+				MoveElement(InNobleSnail, MovementDirection, Step);
+			}
+			else
+			{
+				MoveElement(InNobleSnail, MovementDirection, Step, true);
+			}
+			
 			return true;
 		}
 
@@ -665,7 +681,10 @@ public partial class Level : Node2D
 			
 			if (RemovedElement is WaterSnail || RemovedElement is LeafSnail)
 			{
-				continue;
+				if (RemovedElement.RemovedBy == SnailKind.Fire)
+				{
+					continue;
+				}
 			}
 
 			ExplosionPositions.Add(RemovedElement.Position);

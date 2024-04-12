@@ -10,4 +10,6 @@ public partial class Element : Node2D
 	public Vector2I Location;
 	public bool Moving = false;
 	public bool CanMove = true;
+	// Maybe removed by DarkSnail or FireSnail
+	public SnailKind RemovedBy = SnailKind.None;
 }

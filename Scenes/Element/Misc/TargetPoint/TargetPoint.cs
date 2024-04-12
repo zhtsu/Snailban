@@ -12,14 +12,15 @@ public partial class TargetPoint : Element
 	[Export]
 	public SnailKind Kind = SnailKind.None;
 	public bool Completed = false;
-
 	private Area2D Area;
-
+	private ShaderMaterial ShaderBw;
+    
     public override void _Ready()
     {
 		Area = GetNode<Area2D>("Area2D");
 		Area.Connect("area_entered", new Callable(this, nameof(OnSnailEntered)));
 		Area.Connect("area_exited", new Callable(this, nameof(OnSnailExited)));
+		ShaderBw = (ShaderMaterial)GD.Load("res://Resources/m_bw.tres");
     }
 
 	private void OnSnailEntered(Area2D EnteredArea)
@@ -31,6 +32,7 @@ public partial class TargetPoint : Element
 			if (EnteredSnail != null)
 			{
 				EnteredSnail.CanMove = false;
+				EnteredSnail.GetNode<Sprite2D>("Body").Material = ShaderBw;
 			}
 			EmitSignal("SnailEntered");
 		}
@@ -45,6 +47,7 @@ public partial class TargetPoint : Element
 			if (EnteredSnail != null)
 			{
 				EnteredSnail.CanMove = true;
+				EnteredSnail.GetNode<Sprite2D>("Body").Material = null;
 			}
 			EmitSignal("SnailExited");
 		}

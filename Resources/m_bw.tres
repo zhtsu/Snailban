@@ -1,0 +1,6 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bi6ggfppvwgtk"]
+
+[ext_resource type="Shader" path="res://Shaders/BW.gdshader" id="1_ldhfu"]
+
+[resource]
+shader = ExtResource("1_ldhfu")
