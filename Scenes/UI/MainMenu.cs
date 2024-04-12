@@ -7,7 +7,7 @@ public partial class MainMenu : CanvasLayer
 	private CustomSignals MySignals;
 	private int CursorIndex = 0;
 	private float[] CursorYArray = { 216, 286, 354 };
-	private int last_level = 1;
+	private int LastLevel = 1;
 	private TextureRect Cursor;
 	private bool ViewOpened = false;
 
@@ -27,7 +27,7 @@ public partial class MainMenu : CanvasLayer
 		if (FileAccess.FileExists(ConfigData.user_data_path))
 		{
 			Godot.Collections.Dictionary UserData = MyMethods.LoadJson(ConfigData.user_data_path);
-			last_level = (int)UserData["last_level"];
+			LastLevel = (int)UserData["last_level"];
 		}
 		else
 		{
@@ -84,7 +84,7 @@ public partial class MainMenu : CanvasLayer
 		}
 		else if (CursorIndex == 1)
 		{
-			LastLevel();
+			StartLastLevel();
 		}
 		else if (CursorIndex == 2)
 		{
@@ -97,9 +97,9 @@ public partial class MainMenu : CanvasLayer
 		MySignals.EmitSignal("LevelStarted", 1);
 	}
 
-	private void LastLevel()
+	private void StartLastLevel()
 	{
-		MySignals.EmitSignal("LevelStarted", last_level);
+		MySignals.EmitSignal("LevelStarted", LastLevel);
 	}
 
 	private void OpenLevelView()
@@ -111,6 +111,7 @@ public partial class MainMenu : CanvasLayer
 
 		PackedScene ViewScene = (PackedScene)GD.Load("res://Scenes/UI/View.tscn");
 		View MyView = (View)ViewScene.Instantiate();
+		MyView.LastLevel = LastLevel;
 		MyView.Connect("Closed", Callable.From(() => { ViewOpened = false; }));
 		AddChild(MyView);
 		ViewOpened = true;
