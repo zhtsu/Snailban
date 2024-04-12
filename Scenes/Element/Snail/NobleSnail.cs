@@ -19,7 +19,8 @@ public partial class NobleSnail : Snail
 		Step = 1;
 		while (TargetLocation.X > 0 && TargetLocation.X < 8 && TargetLocation.Y > 0 && TargetLocation.Y < 8)
 		{
-			if (InLevel.MapMatrix[TargetLocation.X, TargetLocation.Y] == null)
+			Element CheckedElement = InLevel.MapMatrix[TargetLocation.X, TargetLocation.Y];
+			if (CheckedElement == null || (CheckedElement is TargetPoint && ((TargetPoint)CheckedElement).Kind == SnailKind.Noble))
 			{
 				Found = true;
 				break;

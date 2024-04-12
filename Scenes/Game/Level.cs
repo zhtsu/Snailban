@@ -316,10 +316,22 @@ public partial class Level : Node2D
 		if (FacingElement != null && FacingElement.Type == ElementType.Snail)
 		{
 			Snail FacingSnail = (Snail)FacingElement;
-			if (FacingSnail.Kind == SnailKind.Fire && (CheckedSnail.Kind == SnailKind.Leaf || CheckedSnail.Kind == SnailKind.Water))
+			if (FacingSnail.Kind == SnailKind.Fire)
 			{
-				CheckedSnail.OnMove(this, MovementDirection);
-				return true;
+				if (CheckedSnail.Kind == SnailKind.Leaf)
+				{
+					LeafSnail MyLeafSnail = (LeafSnail)CheckedSnail;
+					MyLeafSnail.EnterFireSnail(this, (FireSnail)FacingElement);
+					return true;
+				}
+				else if (CheckedSnail.Kind == SnailKind.Water)
+				{
+					WaterSnail MyWaterSnail = (WaterSnail)CheckedSnail;
+					MyWaterSnail.EnterFireSnail(this, (FireSnail)FacingElement);
+					return true;
+				}
+
+				return false;
 			}
 			else if (FacingSnail.Kind == SnailKind.Dark)
 			{
@@ -587,6 +599,7 @@ public partial class Level : Node2D
 		{
 			MyPlayer.CanMove = false;
 		}
+
 		AnimationPlayer ElementAnimPlayer = RemovedElement.GetNode<AnimationPlayer>("AnimationPlayer");
 		ElementAnimPlayer.Play("Flicker");
 
@@ -612,15 +625,21 @@ public partial class Level : Node2D
 		}
 	}
 
-	private Queue<Element> RemovalElementQueue = new Queue<Element>();
-	private void RemoveElementCallable(string AnimName)
+	public Queue<Element> RemovalElementQueue = new Queue<Element>();
+	public void RemoveElementCallable(string AnimName)
 	{
 		List<Vector2> ExplosionPositions = new List<Vector2>();
 		foreach (Element RemovedElement in RemovalElementQueue)
 		{
-			ExplosionPositions.Add(RemovedElement.Position);
 			RemoveChild(RemovedElement);
 			MapMatrix[RemovedElement.Location.X, RemovedElement.Location.Y] = null;
+			
+			if (RemovedElement is WaterSnail || RemovedElement is LeafSnail)
+			{
+				continue;
+			}
+
+			ExplosionPositions.Add(RemovedElement.Position);
 		}
 		RemovalElementQueue.Clear();
 		

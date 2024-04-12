@@ -12,9 +12,5 @@ Kind = 8
 [node name="Body" parent="." index="0"]
 texture = ExtResource("2_ur8rg")
 
-[node name="Area2D" parent="." index="1"]
-position = Vector2(0, 0)
-
 [node name="CollisionShape2D" parent="Area2D" index="0"]
-position = Vector2(32, 32)
 shape = SubResource("CircleShape2D_5rb6s")
