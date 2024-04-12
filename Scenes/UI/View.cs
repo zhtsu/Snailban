@@ -8,16 +8,14 @@ public partial class View : CanvasLayer
     public delegate void ClosedEventHandler();
 
 	private CustomSignals MySignals;
-	private GridContainer Grid;
 	public int LastLevel = 1;
 
 	public override void _Ready()
 	{
 		MySignals = GetNode<CustomSignals>("/root/CustomSignals");
-		Grid = GetNode<GridContainer>("Grid");
 
 		MySignals.SpaceKey += SpaceKeyDown;
-
+		GD.Print(LastLevel);
 		Texture2D LevelLockerTexture = (Texture2D)GD.Load("res://Assets/Textures/level_locker.png");
 		for (int i = 0; i < 16; i++)
 		{
@@ -26,7 +24,8 @@ public partial class View : CanvasLayer
 			{
 				LevelLocker.Texture = LevelLockerTexture;
 			}
-			Grid.AddChild(LevelLocker);
+			LevelLocker.Position = new Vector2((i % 4) * 128, (i / 4) * 128);
+			AddChild(LevelLocker);
 		}
 	}
 

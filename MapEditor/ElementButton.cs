@@ -56,4 +56,9 @@ public partial class ElementButton : Control
 			}
 		}
     }
+
+    public void Reset()
+    {
+        MyButton.Modulate = new Color("#ffffffff");
+    }
 }

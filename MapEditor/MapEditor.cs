@@ -90,6 +90,7 @@ public partial class MapEditor : CanvasLayer
 				});
 				MyElementButton.RightMouseButtonClicked += (() => {
 					((Godot.Collections.Array)MapMatrix[ii])[jj] = -1;
+					MyElementButton.Reset();
 				});
 				Grid.AddChild(MyElementButton);
 				Row.Add(MyElementButton.MyElementBean.Id);

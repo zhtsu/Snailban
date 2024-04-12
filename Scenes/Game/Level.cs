@@ -312,6 +312,11 @@ public partial class Level : Node2D
 
 	public bool HandleSnail(Snail CheckedSnail, Direction MovementDirection)
 	{
+		if (CheckedSnail.CanMove == false)
+		{
+			return false;
+		}
+
 		Element FacingElement = GetFacingElement(CheckedSnail, MovementDirection);
 		if (FacingElement != null && FacingElement.Type == ElementType.Snail)
 		{
@@ -323,12 +328,7 @@ public partial class Level : Node2D
 			}
 			else if (CheckedSnail.Kind == SnailKind.Noble)
 			{
-				NobleSnail MyNobleSnail = (NobleSnail)CheckedSnail;
-				if (MyNobleSnail.TryGetTeleportStep(this, MovementDirection, out int Step))
-				{
-					MoveElement(MyNobleSnail, MovementDirection, Step, true);
-					return true;
-				}
+				return HandleNobleSnail((NobleSnail)CheckedSnail, MovementDirection);
 			}
 
 			if (FacingSnail.Kind == SnailKind.Fire)
@@ -359,12 +359,7 @@ public partial class Level : Node2D
 		{
 			if (CheckedSnail.Kind == SnailKind.Noble)
 			{
-				NobleSnail MyNobleSnail = (NobleSnail)CheckedSnail;
-				if (MyNobleSnail.TryGetTeleportStep(this, MovementDirection, out int Step))
-				{
-					MoveElement(MyNobleSnail, MovementDirection, Step, true);
-					return true;
-				}
+				return HandleNobleSnail((NobleSnail)CheckedSnail, MovementDirection);
 			}
 
 			return false;
@@ -375,6 +370,15 @@ public partial class Level : Node2D
 		}
 		else if (FacingElement != null && FacingElement.Type == ElementType.TargetPoint)
 		{
+			if (CheckedSnail.Kind == SnailKind.Noble)
+			{
+				return HandleNobleSnail((NobleSnail)CheckedSnail, MovementDirection);
+			}
+			else if (CheckedSnail.Kind == SnailKind.Metal)
+			{
+				return HandleMetalSnail((MetalSnail)CheckedSnail, MovementDirection);
+			}
+
 			TargetPoint MyTargetPoint = (TargetPoint)FacingElement;
 			if (CheckedSnail.Kind == SnailKind.Rainbow)
 			{
@@ -395,16 +399,7 @@ public partial class Level : Node2D
 
 		if (CheckedSnail.Kind == SnailKind.Metal)
 		{
-			MetalSnail MyMetalSnail = (MetalSnail)CheckedSnail;
-			if (MyMetalSnail.TryGetTargetStep(this, MovementDirection, out int Step))
-			{
-				MoveElement(MyMetalSnail, MovementDirection, Step);
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+			return HandleMetalSnail((MetalSnail)CheckedSnail, MovementDirection);
 		}
 
 		if (IsElementCanMove(CheckedSnail, MovementDirection))
@@ -415,6 +410,30 @@ public partial class Level : Node2D
 		}
 
 		return false;
+	}
+
+	private bool HandleNobleSnail(NobleSnail InNobleSnail, Direction MovementDirection)
+	{
+		if (InNobleSnail.TryGetTeleportStep(this, MovementDirection, out int Step))
+		{
+			MoveElement(InNobleSnail, MovementDirection, Step, true);
+			return true;
+		}
+
+		return false;
+	}
+
+	private bool HandleMetalSnail(MetalSnail InMetalSnail, Direction MovementDirection)
+	{
+		if (InMetalSnail.TryGetTargetStep(this, MovementDirection, out int Step))
+		{
+			MoveElement(InMetalSnail, MovementDirection, Step);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	private void CheckAllTargetPoint()
