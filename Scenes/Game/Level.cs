@@ -316,6 +316,21 @@ public partial class Level : Node2D
 		if (FacingElement != null && FacingElement.Type == ElementType.Snail)
 		{
 			Snail FacingSnail = (Snail)FacingElement;
+			if (CheckedSnail.Kind == SnailKind.Dark)
+			{
+				CheckedSnail.OnMove(this, MovementDirection);
+				return true;
+			}
+			else if (CheckedSnail.Kind == SnailKind.Noble)
+			{
+				NobleSnail MyNobleSnail = (NobleSnail)CheckedSnail;
+				if (MyNobleSnail.TryGetTeleportStep(this, MovementDirection, out int Step))
+				{
+					MoveElement(MyNobleSnail, MovementDirection, Step, true);
+					return true;
+				}
+			}
+
 			if (FacingSnail.Kind == SnailKind.Fire)
 			{
 				if (CheckedSnail.Kind == SnailKind.Leaf)
@@ -332,20 +347,6 @@ public partial class Level : Node2D
 				}
 
 				return false;
-			}
-			else if (FacingSnail.Kind == SnailKind.Dark)
-			{
-				CheckedSnail.OnMove(this, MovementDirection);
-				return true;
-			}
-			else if (CheckedSnail.Kind == SnailKind.Noble)
-			{
-				NobleSnail MyNobleSnail = (NobleSnail)CheckedSnail;
-				if (MyNobleSnail.TryGetTeleportStep(this, MovementDirection, out int Step))
-				{
-					MoveElement(MyNobleSnail, MovementDirection, Step, true);
-					return true;
-				}
 			}
 
 			return false;
@@ -513,7 +514,15 @@ public partial class Level : Node2D
 			}
 
 			PlayerMoved = true;
-			MoveElement(MyPlayer, MovementDirection);
+			Element FacingElement = GetFacingElement(MyPlayer, MovementDirection);
+			if (FacingElement is DarkSnail && GetFacingElement(FacingElement, MovementDirection) != null)
+			{
+				MoveElement(MyPlayer, MovementDirection, 0);
+			}
+			else
+			{
+				MoveElement(MyPlayer, MovementDirection);
+			}
 		}
 
 		if (PlayerMoved)
@@ -631,6 +640,7 @@ public partial class Level : Node2D
 		List<Vector2> ExplosionPositions = new List<Vector2>();
 		foreach (Element RemovedElement in RemovalElementQueue)
 		{
+			RemovedElement.CanMove = true;
 			RemoveChild(RemovedElement);
 			MapMatrix[RemovedElement.Location.X, RemovedElement.Location.Y] = null;
 			

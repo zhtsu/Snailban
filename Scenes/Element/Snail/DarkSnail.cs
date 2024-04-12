@@ -9,14 +9,14 @@ public partial class DarkSnail : Snail
 		if (FacingElement != null && FacingElement.Type == ElementType.Snail)
 		{
 			CanMove = false;
+			foreach (Player MyPlayer in InLevel.MyPlayers)
+			{
+				MyPlayer.CanMove = false;
+			}
+
 			InLevel.CanRedo = false;
 			InLevel.RemoveElement(FacingElement);
 			InLevel.RemoveElement(this);
 		}
-	}
-
-	public override void OnRedo(Level InLevel, Vector2I OldLocation)
-	{
-		CanMove = true;
 	}
 }
