@@ -1,5 +1,5 @@
 # Snailban
-A Sokoban like game made with Godot Engine(C#)
+A Sokoban like game made with Godot Engine(.NET)
 
 Itch: https://zhtsu.itch.io/snailban
 
