@@ -31,9 +31,10 @@ public partial class WaterSnail : Snail
 
 	public override void OnRedo(Level InLevel, Vector2I OldLocation)
 	{
-		if (TargetFireSnail != null && TargetFireSnail.Countdown < 3)
+		if (TargetFireSnail != null)
 		{
 			TargetFireSnail.PlusOne();
+			TargetFireSnail = null;
 		}
 	}
 }

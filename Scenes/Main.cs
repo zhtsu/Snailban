@@ -44,17 +44,13 @@ public partial class Main : Node
 			{
 				MySignals.EmitSignal("SpaceKey");
 			}
+			else if (Input.IsActionJustPressed("R"))
+			{
+				MySignals.EmitSignal("Restart");
+			}
 			else if (Input.IsActionJustPressed("ESC"))
 			{
-				foreach (Node Child in GetChildren())
-				{
-					RemoveChild(Child);
-					Child.QueueFree();
-				}
-
-				PackedScene MainMenuSence = (PackedScene)GD.Load("res://Scenes/UI/MainMenu.tscn");
-				MainMenu MyMainMenu = (MainMenu)MainMenuSence.Instantiate();
-				AddChild(MyMainMenu);
+				BackToMainMenu();
 			}
 		}
     }
@@ -71,5 +67,18 @@ public partial class Main : Node
 		Level MyLevel = (Level)LevelScene.Instantiate();
 		MyLevel.MapId = MapId;
 		AddChild(MyLevel);
+	}
+
+	public void BackToMainMenu()
+	{
+		foreach (Node Child in GetChildren())
+		{
+			RemoveChild(Child);
+			Child.QueueFree();
+		}
+
+		PackedScene MainMenuSence = (PackedScene)GD.Load("res://Scenes/UI/MainMenu.tscn");
+		MainMenu MyMainMenu = (MainMenu)MainMenuSence.Instantiate();
+		AddChild(MyMainMenu);
 	}
 }

@@ -58,6 +58,7 @@ public partial class Level : Node2D
 			MySignals.LeftKey += LeftKeyDown;
 			MySignals.RightKey += RightKeyDown;
 			MySignals.SpaceKey += SpaceKeyDown;
+			MySignals.Restart += Restart;
 		}
 
 		FileAccess UserDataFile = FileAccess.Open(ConfigData.user_data_path, FileAccess.ModeFlags.Write);
@@ -78,6 +79,7 @@ public partial class Level : Node2D
 			MySignals.LeftKey -= LeftKeyDown;
 			MySignals.RightKey -= RightKeyDown;
 			MySignals.SpaceKey -= SpaceKeyDown;
+			MySignals.Restart -= Restart;
 		}
     }
 
@@ -477,6 +479,14 @@ public partial class Level : Node2D
 
 	public bool HandleDoor(Door CheckedDoor)
 	{
+		if (MapId == 16)
+		{
+			PackedScene ThanksScene = (PackedScene)GD.Load("res://Scenes/UI/Thanks.tscn");
+			Thanks MyThanks = (Thanks)ThanksScene.Instantiate();
+			AddChild(MyThanks);
+			return false;
+		}
+
 		if (CheckedDoor.Accept == true)
 		{
 			MySignals.EmitSignal("LevelStarted", MapBean.NextLevel);
@@ -619,6 +629,11 @@ public partial class Level : Node2D
 		ElementLocationHistory.Remove(StepCount);
 		StepCount -= 1;
 		StepCountLabel.Text = StepCount.ToString();
+	}
+
+	private void Restart()
+	{
+		MySignals.EmitSignal("LevelStarted", MapId);
 	}
 
 	private bool IsStepGreaterOne(Vector2I OldLocation, Vector2I NewLocation)

@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://c7xb00svvnt5r"]
+
+[ext_resource type="Script" path="res://Scenes/UI/Thanks.cs" id="1_a6u83"]
+[ext_resource type="Texture2D" uid="uid://c3yyc8q2vno5m" path="res://Assets/Textures/thanks.png" id="1_op3ep"]
+
+[node name="Thanks" type="CanvasLayer"]
+script = ExtResource("1_a6u83")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_op3ep")
