@@ -34,6 +34,7 @@ public partial class TargetPoint : Element
 				EnteredSnail.CanMove = false;
 				EnteredSnail.InTargetPoint = true;
 				EnteredSnail.GetNode<Sprite2D>("Body").Material = ShaderBw;
+				LevelRef.MapMatrix[Location.X, Location.Y] = EnteredSnail;
 			}
 			EmitSignal("SnailEntered");
 		}
@@ -48,6 +49,7 @@ public partial class TargetPoint : Element
 			if (EnteredSnail != null)
 			{
 				EnteredSnail.CanMove = true;
+				EnteredSnail.InTargetPoint = false;
 				EnteredSnail.GetNode<Sprite2D>("Body").Material = null;
 			}
 			EmitSignal("SnailExited");

@@ -17,6 +17,10 @@ public partial class NobleSnail : Snail
 		Vector2I TargetLocation = this.Location + Vec;
 		bool Found = false;
 		Step = 1;
+		Player FarthestPlayer = null;
+		// Useful when its a player on the current forward path
+		int SpecialStep = 0;
+
 		while (TargetLocation.X >= 0 && TargetLocation.X < 8 && TargetLocation.Y >= 0 && TargetLocation.Y < 8)
 		{
 			Element CheckedElement = InLevel.MapMatrix[TargetLocation.X, TargetLocation.Y];
@@ -26,8 +30,23 @@ public partial class NobleSnail : Snail
 				break;
 			}
 
+			if (CheckedElement is Player)
+			{
+				FarthestPlayer = (Player)CheckedElement;
+				SpecialStep = Step;
+			}
+
 			Step += 1;
 			TargetLocation += Vec;
+		}
+
+		if (FarthestPlayer != null)
+		{
+			if (LevelRef.IsElementCanMove(FarthestPlayer, MovementDirection))
+			{
+				Step = SpecialStep;
+				LevelRef.MoveElement(FarthestPlayer, MovementDirection);
+			}
 		}
 
 		return Found;

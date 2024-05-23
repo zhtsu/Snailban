@@ -175,6 +175,7 @@ public partial class Level : Node2D
 						MyDoor = (Door)MyElement;
 					}
 					MyElement.Position = new Vector2(j * 64 + 32, i * 64 + 32);
+					MyElement.LevelRef = this;
 					AddChild(MyElement);
 				}
 			}
@@ -337,7 +338,11 @@ public partial class Level : Node2D
 		if (FacingElement != null && FacingElement.Type == ElementType.Snail)
 		{
 			Snail FacingSnail = (Snail)FacingElement;
-			
+			if (FacingSnail.InTargetPoint)
+			{
+				return false;
+			}
+
 			if (CheckedSnail.Kind == SnailKind.Dark)
 			{
 				FacingSnail.RemovedBy = SnailKind.Fire;
@@ -513,7 +518,7 @@ public partial class Level : Node2D
 	}
 
 	// If the element can move, return the location after moving
-	private bool IsElementCanMove(Element MovedElement, Direction MovementDirection)
+	public bool IsElementCanMove(Element MovedElement, Direction MovementDirection)
 	{
 		if (MovedElement.CanMove == false)
 		{

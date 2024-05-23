@@ -12,4 +12,5 @@ public partial class Element : Node2D
 	public bool CanMove = true;
 	// Maybe removed by DarkSnail or FireSnail
 	public SnailKind RemovedBy = SnailKind.None;
+	public Level LevelRef = null;
 }
