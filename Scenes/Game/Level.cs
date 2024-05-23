@@ -338,7 +338,7 @@ public partial class Level : Node2D
 		if (FacingElement != null && FacingElement.Type == ElementType.Snail)
 		{
 			Snail FacingSnail = (Snail)FacingElement;
-			if (FacingSnail.InTargetPoint)
+			if (CheckedSnail.Kind != SnailKind.Noble && FacingSnail.InTargetPoint)
 			{
 				return false;
 			}
