@@ -8,8 +8,8 @@ public partial class MainMenu : CanvasLayer
 	private int CursorIndex = 0;
 	private float[] CursorYArray = { 216, 286, 354 };
 	private int LastLevel = 1;
+	private int MaxLevel = 1;
 	private TextureRect Cursor;
-	private bool ViewOpened = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -28,12 +28,14 @@ public partial class MainMenu : CanvasLayer
 		{
 			Godot.Collections.Dictionary UserData = MyMethods.LoadJson(ConfigData.user_data_path);
 			LastLevel = (int)UserData["last_level"];
+			MaxLevel = (int)UserData["max_level"];
 		}
 		else
 		{
 			FileAccess UserDataFile = FileAccess.Open(ConfigData.user_data_path, FileAccess.ModeFlags.Write);
 			Godot.Collections.Dictionary UserData = new Godot.Collections.Dictionary();
 			UserData["last_level"] = 1;
+			UserData["max_level"] = 1;
 			UserDataFile.StoreString(UserData.ToString());
 			UserDataFile.Close();
 		}
@@ -95,6 +97,14 @@ public partial class MainMenu : CanvasLayer
 	private void NewGame()
 	{
 		MySignals.EmitSignal("LevelStarted", 1);
+
+		Godot.Collections.Dictionary UserData = new Godot.Collections.Dictionary();
+		UserData["last_level"] = 1;
+		UserData["max_level"] = 1;
+		
+		FileAccess UserDataFile = FileAccess.Open(ConfigData.user_data_path, FileAccess.ModeFlags.Write);
+		UserDataFile.StoreString(UserData.ToString());
+		UserDataFile.Close();
 	}
 
 	private void StartLastLevel()
@@ -104,16 +114,9 @@ public partial class MainMenu : CanvasLayer
 
 	private void OpenLevelView()
 	{
-		if (ViewOpened == true)
-		{
-			return;
-		}
-
 		PackedScene ViewScene = (PackedScene)GD.Load("res://Scenes/UI/View.tscn");
 		View MyView = (View)ViewScene.Instantiate();
-		MyView.LastLevel = LastLevel;
-		MyView.Connect("Closed", Callable.From(() => { ViewOpened = false; }));
+		MyView.Init(LastLevel, MaxLevel);
 		AddChild(MyView);
-		ViewOpened = true;
 	}
 }

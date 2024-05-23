@@ -61,11 +61,25 @@ public partial class Level : Node2D
 			MySignals.Restart += Restart;
 		}
 
-		FileAccess UserDataFile = FileAccess.Open(ConfigData.user_data_path, FileAccess.ModeFlags.Write);
-		Godot.Collections.Dictionary UserData = new Godot.Collections.Dictionary();
-		UserData["last_level"] = MapId;
-		UserDataFile.StoreString(UserData.ToString());
-		UserDataFile.Close();
+		if (FileAccess.FileExists(ConfigData.user_data_path))
+		{
+			Godot.Collections.Dictionary SavedUserData = MyMethods.LoadJson(ConfigData.user_data_path);
+			int LastLevel = (int)SavedUserData["last_level"];
+			int MaxLevel = (int)SavedUserData["max_level"];
+
+			// Update last level and max level data
+			Godot.Collections.Dictionary UserData = new Godot.Collections.Dictionary();
+			UserData["last_level"] = MapId;
+			UserData["max_level"] = MaxLevel;
+			if (MapId > MaxLevel)
+			{
+				UserData["max_level"] = MapId;
+			}
+
+			FileAccess UserDataFile = FileAccess.Open(ConfigData.user_data_path, FileAccess.ModeFlags.Write);
+			UserDataFile.StoreString(UserData.ToString());
+			UserDataFile.Close();
+		}
 	}
 
     public override void _ExitTree()
@@ -323,6 +337,7 @@ public partial class Level : Node2D
 		if (FacingElement != null && FacingElement.Type == ElementType.Snail)
 		{
 			Snail FacingSnail = (Snail)FacingElement;
+			
 			if (CheckedSnail.Kind == SnailKind.Dark)
 			{
 				FacingSnail.RemovedBy = SnailKind.Fire;
@@ -416,6 +431,7 @@ public partial class Level : Node2D
 		{
 			MoveElement(CheckedSnail, MovementDirection);
 			CheckedSnail.OnMove(this, MovementDirection);
+			
 			return true;
 		}
 

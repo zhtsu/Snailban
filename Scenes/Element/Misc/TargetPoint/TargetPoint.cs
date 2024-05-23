@@ -32,6 +32,7 @@ public partial class TargetPoint : Element
 			if (EnteredSnail != null)
 			{
 				EnteredSnail.CanMove = false;
+				EnteredSnail.InTargetPoint = true;
 				EnteredSnail.GetNode<Sprite2D>("Body").Material = ShaderBw;
 			}
 			EmitSignal("SnailEntered");

@@ -18,9 +18,9 @@ public partial class Main : Node
 	{
 	}
 
-    public override void _Input(InputEvent @event)
-    {
-        base._Input(@event);
+	public override void _Input(InputEvent @event)
+	{
+		base._Input(@event);
 
 		if (@event is InputEventKey EventKey)
 		{
@@ -53,7 +53,7 @@ public partial class Main : Node
 				BackToMainMenu();
 			}
 		}
-    }
+	}
 
 	private void LoadLevel(int MapId)
 	{

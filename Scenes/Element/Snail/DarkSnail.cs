@@ -8,6 +8,11 @@ public partial class DarkSnail : Snail
 		Element FacingElement = InLevel.GetFacingElement(this, MovementDirection);
 		if (FacingElement != null && FacingElement.Type == ElementType.Snail)
 		{
+			if (((Snail)FacingElement).InTargetPoint)
+			{
+				return;
+			}
+
 			CanMove = false;
 			foreach (Player MyPlayer in InLevel.MyPlayers)
 			{

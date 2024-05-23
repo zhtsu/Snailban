@@ -5,6 +5,7 @@ public partial class Snail : Element
 {
 	[Export]
 	public SnailKind Kind = SnailKind.None;
+	public bool InTargetPoint = false;
 
 	public virtual void OnMove(Level InLevel, Direction MovementDirection)
 	{
