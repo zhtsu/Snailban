@@ -1,0 +1,14 @@
+{
+	"textPath":"res://Assets/privacy.txt",
+	"backgroundColor":"#ffffff",
+	"contentColor":"#ffffff",
+	"textColor":"#000000",
+	"agreeBtn":{
+		"color":"#00d9c5",
+		"textColor":"#ffffff"
+	},
+	"cancelBtn":{
+		"color":"#ffffff",
+		"textColor":"#000000"
+	}
+}

@@ -37,7 +37,7 @@ project/assembly_name="Snailban"
 
 [editor_plugins]
 
-enabled=PackedStringArray()
+enabled=PackedStringArray("res://addons/GodotPrivacyPlugin/plugin.cfg")
 
 [filesystem]
 
