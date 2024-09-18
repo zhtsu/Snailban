@@ -14,13 +14,11 @@
 script = ExtResource("1_ui45d")
 
 [node name="ColorRect" type="ColorRect" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 512.0
+offset_bottom = 512.0
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="ColorRect"]
+layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -41,11 +39,8 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("3_1kpx8")
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 512.0
+offset_bottom = 512.0
 
 [node name="TextureRect2" type="TextureRect" parent="VBoxContainer2"]
 layout_mode = 2

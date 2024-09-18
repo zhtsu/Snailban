@@ -41,14 +41,14 @@ public partial class MainMenu : CanvasLayer
 		}
 	}
 
-    public override void _ExitTree()
-    {
-        base._ExitTree();
+	public override void _ExitTree()
+	{
+		base._ExitTree();
 
 		MySignals.UpKey -= UpKeyDown;
 		MySignals.DownKey -= DownKeyDown;
 		MySignals.SpaceKey -= SpaceKeyDown;
-    }
+	}
 
 	private void UpKeyDown()
 	{

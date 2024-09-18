@@ -1,9 +1,266 @@
-[gd_scene load_steps=3 format=3 uid="uid://dt7n50ftnvbxg"]
+[gd_scene load_steps=7 format=3 uid="uid://dt7n50ftnvbxg"]
 
 [ext_resource type="Script" path="res://Scenes/Main.cs" id="1_lv35f"]
 [ext_resource type="PackedScene" uid="uid://c5cqlx8g24oi3" path="res://Scenes/UI/MainMenu.tscn" id="2_ilaps"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_noklf"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_82tny"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4vnyt"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_eecsc"]
+
 [node name="Main" type="Node" groups=["Main"]]
 script = ExtResource("1_lv35f")
 
-[node name="MainMenu" parent="." instance=ExtResource("2_ilaps")]
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel2" type="Panel" parent="Panel"]
+offset_left = 106.0
+offset_top = 106.0
+offset_right = 646.0
+offset_bottom = 646.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_noklf")
+
+[node name="Panel1" type="Panel" parent="Panel"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 60.0
+offset_top = -534.0
+offset_right = 460.0
+offset_bottom = -134.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_82tny")
+metadata/_edit_group_ = true
+
+[node name="Panel" type="Panel" parent="Panel/Panel1"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -60.0
+offset_right = 60.0
+offset_bottom = 120.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4vnyt")
+metadata/_edit_group_ = true
+
+[node name="UpButton" type="Button" parent="Panel/Panel1/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 40
+text = "上"
+
+[node name="Panel3" type="Panel" parent="Panel/Panel1"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = -120.0
+offset_right = 60.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_4vnyt")
+metadata/_edit_group_ = true
+
+[node name="DownButton" type="Button" parent="Panel/Panel1/Panel3"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 40
+text = "下"
+
+[node name="Panel4" type="Panel" parent="Panel/Panel1"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -60.0
+offset_right = 120.0
+offset_bottom = 60.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4vnyt")
+metadata/_edit_group_ = true
+
+[node name="LeftButton" type="Button" parent="Panel/Panel1/Panel4"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 40
+text = "左"
+
+[node name="Panel5" type="Panel" parent="Panel/Panel1"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -60.0
+offset_bottom = 60.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4vnyt")
+metadata/_edit_group_ = true
+
+[node name="RightButton" type="Button" parent="Panel/Panel1/Panel5"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 40
+text = "右
+"
+
+[node name="Panel3" type="Panel" parent="Panel"]
+offset_left = 500.0
+offset_top = 780.0
+offset_right = 700.0
+offset_bottom = 1220.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_eecsc")
+
+[node name="Panel" type="Panel" parent="Panel/Panel3"]
+layout_mode = 1
+offset_top = 160.0
+offset_right = 200.0
+offset_bottom = 280.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_4vnyt")
+metadata/_edit_group_ = true
+
+[node name="SpaceButton" type="Button" parent="Panel/Panel3/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -90.0
+offset_top = -50.0
+offset_right = 90.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 36
+text = "确认/后退"
+
+[node name="Panel2" type="Panel" parent="Panel/Panel3"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -220.0
+offset_right = 200.0
+offset_bottom = -100.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4vnyt")
+metadata/_edit_group_ = true
+
+[node name="RButton" type="Button" parent="Panel/Panel3/Panel2"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -90.0
+offset_top = -50.0
+offset_right = 90.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 36
+text = "重开"
+
+[node name="Panel3" type="Panel" parent="Panel/Panel3"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -120.0
+offset_right = 200.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_4vnyt")
+metadata/_edit_group_ = true
+
+[node name="ESCButton" type="Button" parent="Panel/Panel3/Panel3"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -90.0
+offset_top = -50.0
+offset_right = 90.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 36
+text = "返回"
+
+[node name="SubViewport" type="SubViewportContainer" parent="."]
+custom_minimum_size = Vector2(512, 512)
+offset_left = 120.0
+offset_top = 120.0
+offset_right = 120.0
+offset_bottom = 120.0
+
+[node name="SubViewport" type="SubViewport" parent="SubViewport"]
+canvas_item_default_texture_filter = 0
+
+[node name="MainMenu" parent="SubViewport/SubViewport" instance=ExtResource("2_ilaps")]

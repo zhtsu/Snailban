@@ -22,13 +22,14 @@ CustomSignals="*res://Scenes/Global/CustomSignals.cs"
 
 [display]
 
-window/size/viewport_width=512
-window/size/viewport_height=512
+window/size/viewport_width=750
+window/size/viewport_height=1334
 window/size/resizable=false
-window/size/window_width_override=512
-window/size/window_height_override=512
+window/size/window_width_override=375
+window/size/window_height_override=667
 window/subwindows/embed_subwindows=false
-window/stretch/mode="canvas_items"
+window/stretch/mode="viewport"
+window/handheld/orientation=1
 
 [dotnet]
 
@@ -83,3 +84,6 @@ R={
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
